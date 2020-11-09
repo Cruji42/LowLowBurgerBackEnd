@@ -5,7 +5,7 @@ import indexRoutes from './routes/index';
 
 //midelwares
 app.use(express.json());
-app.use(express.urlencoded({extended: false}));
+app.use(express.urlencoded({extended: true}));
 
 app.use(indexRoutes);
 
