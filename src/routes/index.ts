@@ -7,8 +7,8 @@ const router = Router();
 
 
 
-router.get('/test', (req, res)=> {
-    res.send('Message from get');
+router.get('/', (req, res)=> {
+    res.send('API Running');
 });
 
 router.get('/users', getUsers);
