@@ -47,11 +47,11 @@ export const createUser = async (req: Request, res: Response): Promise<Response>
 
  export const updateUser = async (req: Request, res: Response): Promise<Response> => {
     try{
-     const Id = parseInt(req.params.id);
-     const {name, last_name, address, email, password, phone_number} = req.body;
+     // const Id = parseInt(req.params.id);
+     const {id, name, last_name, address, email, password, phone_number} = req.body;
      const response = await pool.query('UPDATE users SET name= $1, last_name= $2, address= $3, ' +
          'email = $4, password= $5, phone_number= $5 WHERE id = $6', [name, last_name, address, email,
-         password, phone_number, Id]);
+         password, phone_number, id]);
      return res.json({
          message: 'User updated',
          body:{

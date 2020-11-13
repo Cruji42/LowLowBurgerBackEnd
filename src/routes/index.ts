@@ -11,27 +11,31 @@ router.get('/', (req, res)=> {
     res.send('API Running');
 });
 
+
+// Auth Routes
+router.post('/login', Login);
+router.post('/register', Register);
+router.post('/recovery', PasswordRecovery);
+
+//User Routes
 router.get('/users', getUsers);
 router.get('/users/:email', getUserbyEmail);
-//router.post('/users', createUser);
 router.put('/users/:id', updateUser);
 router.delete('/users/:id', deleteUser);
+
 // Products Routes
 router.get('/products', getProducts);
 router.get('/products/:id', getProductbyId);
 router.post('/products', createProduct);
 router.put('/products/:id', updateProduct);
 router.delete('/products/:id', deleteProduct);
+
 // Orders Routes
 router.get('/orders', getOrders);
-router.get('/orders/:id', getOrderbyId);
+router.get('/orders/:id', getOrderbyId);//detalles de la orden con sus productos
 router.post('/orders', createOrder);
 router.put('/orders/:id', updateOrder);
 router.delete('/orders/:id', deleteOrder);
-// Auth Routes
-router.post('/login', Login);
-router.post('/register', Register);
-router.post('/recovery', PasswordRecovery);
 
 export default router;
 

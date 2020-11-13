@@ -48,9 +48,9 @@ export const createProduct = async (req: Request, res: Response): Promise<Respon
 export const updateProduct = async (req: Request, res: Response): Promise<Response> => {
     try{
         const Id = parseInt(req.params.id);
-        const {name, description, price, image, id} = req.body;
+        const {name, description, price, image} = req.body;
         const response = await pool.query('UPDATE products SET name= $1, description= $2, price= $3, image = $4 ' +
-            'WHERE id = $5', [name, description, price, image, id]);
+            'WHERE id = $5', [name, description, price, image, Id]);
         return res.json({
             message: 'Product updated',
             body:{
