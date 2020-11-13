@@ -3,6 +3,13 @@ import {deleteUser, getUserbyEmail, getUsers, updateUser} from '../controllers/u
 import {createProduct, deleteProduct, getProductbyId, getProducts, updateProduct} from '../controllers/products_controller';
 import {createOrder, deleteOrder, getOrderbyId, getOrders, updateOrder} from '../controllers/order_controller';
 import {Login, PasswordRecovery, Register} from "../controllers/auth_controller";
+import {
+    createToppings,
+    deleteToppings,
+    getToppings,
+    getToppingsbyId,
+    updateToppings
+} from "../controllers/toppings_controller";
 const router = Router();
 
 
@@ -36,6 +43,13 @@ router.get('/orders/:id', getOrderbyId);//detalles de la orden con sus productos
 router.post('/orders', createOrder);
 router.put('/orders/:id', updateOrder);
 router.delete('/orders/:id', deleteOrder);
+
+// Toppings Routes
+router.get('/toppings', getToppings);
+router.get('/toppings/:id', getToppingsbyId);//detalles de la orden con sus productos
+router.post('/toppings', createToppings);
+router.put('/toppings/:id', updateToppings);
+router.delete('/toppings/:id', deleteToppings);
 
 export default router;
 
