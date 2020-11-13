@@ -27,7 +27,7 @@ router.post('/recovery', PasswordRecovery);
 //User Routes
 router.get('/users', getUsers);
 router.get('/users/:email', getUserbyEmail);
-router.put('/users/:id', updateUser);
+router.put('/users', updateUser);
 router.delete('/users/:id', deleteUser);
 
 // Products Routes
