@@ -50,7 +50,7 @@ export const createUser = async (req: Request, res: Response): Promise<Response>
      // const Id = parseInt(req.params.id);
      const {id, name, last_name, address, email, password, phone_number, rol} = req.body;
      const response = await pool.query('UPDATE users SET name= $1, last_name= $2, address= $3, ' +
-         'email = $4, password= $5, phone_number= $5, rol= $6 WHERE id = $7', [name, last_name, address, email,
+         'email = $4, password= $5, phone_number= $6, rol= $7 WHERE id = $8', [name, last_name, address, email,
          password, phone_number, rol, id]);
      return res.json({
          message: 'User updated',
