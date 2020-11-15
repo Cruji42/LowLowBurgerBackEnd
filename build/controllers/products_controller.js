@@ -16,9 +16,7 @@ exports.getProducts = (req, res) => __awaiter(void 0, void 0, void 0, function* 
         const response = yield database_1.pool.query('SELECT * FROM products');
         console.log(response.rows);
         return res.status(200).json({
-            "result": [
-                response.rows
-            ]
+            "result": response.rows
         });
     }
     catch (error) {
