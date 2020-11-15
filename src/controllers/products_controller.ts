@@ -8,7 +8,13 @@ export const getProducts = async (req: Request, res: Response): Promise<Response
     try {
         const response: QueryResult = await pool.query('SELECT * FROM products');
         console.log(response.rows);
-        return res.status(200).json(response.rows);
+        return res.status(200).json(
+            {
+                "result": [
+                    response.rows
+                ]
+            }
+        );
     } catch (error) {
         console.log(error);
         return res.status(500).json('internal server error');

@@ -1,5 +1,6 @@
 import {Pool} from 'pg';
 
+// DEPLOY
 export const pool = new Pool({
     user:'ikdpcqjiaqzovf',
     host:'ec2-23-20-168-40.compute-1.amazonaws.com',
@@ -7,3 +8,4 @@ export const pool = new Pool({
     database:'d8rdvtof32nulh',
     port: 5432
 })
+
