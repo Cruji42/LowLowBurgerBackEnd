@@ -80,9 +80,12 @@ export const Register = async (req: Request, res: Response): Promise<Response> =
 export const PasswordRecovery = async (req: Request, res: Response): Promise<Response> => {
     try{
         const {email} = req.body;
+        const useremail = await email;
         let options ={
             from: 'Low Low Burguer',
-            to: 'l.move971223@itses.edu.mx',
+            // Change this static email
+            // to: 'l.move971223@itses.edu.mx',
+            to: useremail,
             subject: "Cambio de contraseña",
             html: '<!DOCTYPE html><html lang="en"><head> <meta charset="UTF-8"> <link rel="stylesheet" href="recover.css"> <title>Reset Password</title> <style>.container{background-color: darkgray; position: fixed; width: 100%; height: 100%;}.card{background-color: white; position: relative; width: 80%; height: 80%; top: 10%; bottom: 10%; left: 10%; right: 10%;}.card img{width: 40%; height: auto; position: relative; right: 30%; left: 30%;}.card p{color: black; font-family: "Arial Rounded MT Bold"; text-align: center;}.title{padding-top: 5%; font-weight: bold; font-size: 20px; margin-left: 20%; margin-right: 20%; width: 60%;}.button{background-color: #57B7EB; border-radius: 5px; font-weight: bold; color: white; margin-left: 40%; margin-right: 40%; width: 20%;}</style></head><body><div class="container"> <div class="card"> <p class="title">Recuperación de contraseña</p><br><img src="https://firebasestorage.googleapis.com/v0/b/lowlowburger.appspot.com/o/fast-food.png?alt=media&token=63594e85-5321-431b-b544-9fa33aa9b79c"> <br><p>Hola</p><p>Has solicitado un cambio de contraseña.</p><br><button class="button">Cambiar Contraseña</button> <p>Si no has sido tú el que solicitó el cambio, ignora este mensaje</p></div></div></body></html>'
         };
