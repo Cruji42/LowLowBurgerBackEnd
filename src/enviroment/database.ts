@@ -7,5 +7,13 @@ export const pool = new Pool({
     password:'d689f2296a72864be45270a9b0f757de26f77e668474d7b49d9de4d9fca4c07e',
     database:'d8rdvtof32nulh',
     port: 5432
-})
+});
+
+/*export const pool = new Pool({
+    user:'postgres',
+    host:'localhost',
+    password:' ',
+    database:'LLB',
+    port: 5432
+});*/
 

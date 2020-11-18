@@ -3,13 +3,8 @@ import {deleteUser, getUserbyEmail, getUsers, updateUser} from '../controllers/u
 import {createProduct, deleteProduct, getProductbyId, getProducts, updateProduct} from '../controllers/products_controller';
 import {createOrder, deleteOrder, getOrderbyId, getOrders, updateOrder} from '../controllers/order_controller';
 import {Login, PasswordRecovery, Register} from "../controllers/auth_controller";
-import {
-    createToppings,
-    deleteToppings,
-    getToppings,
-    getToppingsbyId,
-    updateToppings
-} from "../controllers/toppings_controller";
+import {createToppings, deleteToppings, getToppings, getToppingsbyId, updateToppings } from "../controllers/toppings_controller";
+
 const router = Router();
 
 

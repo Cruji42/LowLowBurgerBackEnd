@@ -12,6 +12,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.PasswordRecovery = exports.Register = exports.Login = void 0;
 const database_1 = require("../enviroment/database");
 const bcrypt = require('bcrypt');
+var nodemailer = require('nodemailer');
 // @ts-ignore
 exports.Login = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
@@ -62,19 +63,43 @@ exports.Register = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
         return res.status(500).json('internal server error');
     }
 });
-exports.PasswordRecovery = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    try {
-        const { name, description, price, image } = req.body;
-        const response = yield database_1.pool.query('INSERT INTO order (name, description, price, image)' +
-            ' VALUES ($1 , $2, $3, $4)', [name, description, price, image]);
+/*export const PasswordRecovery = async (req: Request, res: Response): Promise<Response> => {
+    try{
+        const {name, description, price, image} = req.body;
+        const response = await pool.query('INSERT INTO order (name, description, price, image)' +
+            ' VALUES ($1 , $2, $3, $4)', [name, description, price, image])
         return res.status(500).json({
             message: 'Product added',
-            body: {
-                user: {
+            body:{
+                user:{
                     name
                 }
             }
+        })
+    }catch(error){
+        console.log(error);
+        return res.status(500).json('internal server error');
+    }
+}*/
+// @ts-ignore
+exports.PasswordRecovery = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        var transporter = nodemailer.createTransport({
+            host: "smtp.gmail.com",
+            port: 587,
+            secure: false,
+            auth: {
+                user: "lowlowburger@gmail.com",
+                pass: "Mr.cruji42"
+            }
         });
+        var options = {
+            from: "Remitente",
+            to: "l.move971223@itses.edu.mx",
+            subject: "Cambio de contraseña",
+            text: "Aqui va el contenido del email"
+        };
+        transporter.sendMail(options);
     }
     catch (error) {
         console.log(error);
