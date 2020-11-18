@@ -85,6 +85,7 @@ exports.Register = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
 exports.PasswordRecovery = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { email } = req.body;
+        const template = "<!DOCTYPE html><html lang=\"en\"><head> <meta charset=\"UTF-8\"> <link rel=\"stylesheet\" href=\"recover.css\"> <title>Reset Password</title> <style>.container{background-color: darkgray; position: fixed; width: 100%; height: 100%;}.card{background-color: white; position: relative; width: 80%; height: 80%; top: 10%; bottom: 10%; left: 10%; right: 10%;}.card img{width: 40%; height: auto; position: relative; right: 30%; left: 30%;}.card p{color: black; font-family: \"Arial Rounded MT Bold\"; text-align: center;}.title{padding-top: 5%; font-weight: bold; font-size: 20px; margin-left: 20%; margin-right: 20%; width: 60%;}.button{background-color: #57B7EB; border-radius: 5px; font-weight: bold; color: white; margin-left: 40%; margin-right: 40%; width: 20%;}</style></head><body><div class=\"container\"> <div class=\"card\"> <p class=\"title\">Recuperación de contraseña</p><br><img src=\"https://firebasestorage.googleapis.com/v0/b/lowlowburger.appspot.com/o/fast-food.png?alt=media&token=63594e85-5321-431b-b544-9fa33aa9b79c\"> <br><p>Hola, UserName</p><p>Has solicitado un cambio de contraseña.</p><br><button class=\"button\">Cambiar Contraseña</button> <p>Si no has sido tú el que solicitó el cambio, ignora este mensaje</p></div></div></body></html>";
         var transporter = nodemailer.createTransport({
             host: "smtp.gmail.com",
             port: 587,
@@ -95,32 +96,10 @@ exports.PasswordRecovery = (req, res) => __awaiter(void 0, void 0, void 0, funct
             }
         });
         var options = {
-            from: "Remitente",
+            from: "Low Low Burger",
             to: email,
             subject: "Cambio de contraseña",
-            text: "<!DOCTYPE html>\n" +
-                "<html lang=\"en\">\n" +
-                "<head>\n" +
-                "    <meta charset=\"UTF-8\">\n" +
-                "    <link rel=\"stylesheet\" href=\"..\templates\recover.css\">\n" +
-                "    <title>Reset Password</title>\n" +
-                "</head>\n" +
-                "<body>\n" +
-                "<div class=\"container\">\n" +
-                "    <div class=\"card\">\n" +
-                "        <p class=\"title\">Recuperación de contraseña</p>\n" +
-                "        <br>\n" +
-                "        <img src=\"https://firebasestorage.googleapis.com/v0/b/lowlowburger.appspot.com/o/fast-food.png?alt=media&token=63594e85-5321-431b-b544-9fa33aa9b79c\">\n" +
-                "        <br>\n" +
-                "        <p>Hola</p>\n" +
-                "        <p>Has solicitado un cambio de contraseña.</p>\n" +
-                "        <br>\n" +
-                "        <button class=\"button\">Cambiar Contraseña</button>\n" +
-                "        <p>Si no has sido tú el que solicitó el cambio, ignora este mensaje</p>\n" +
-                "    </div>\n" +
-                "</div>\n" +
-                "</body>\n" +
-                "</html>"
+            text: template
         };
         transporter.sendMail(options);
     }
