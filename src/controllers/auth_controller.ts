@@ -2,6 +2,7 @@ import {Request, Response} from 'express'
 import {pool} from '../enviroment/database'
 const bcrypt = require('bcrypt');
 var nodemailer = require('nodemailer');
+var EmailTemplate = require('email-templates').EmailTemplate;
 
 
 // @ts-ignore
@@ -77,7 +78,6 @@ export const Register = async (req: Request, res: Response): Promise<Response> =
 export const PasswordRecovery = async (req: Request, res: Response): Promise<Response> => {
     try{
         const {email} = req.body;
-        const template = "<!DOCTYPE html><html lang=\"en\"><head> <meta charset=\"UTF-8\"> <link rel=\"stylesheet\" href=\"recover.css\"> <title>Reset Password</title> <style>.container{background-color: darkgray; position: fixed; width: 100%; height: 100%;}.card{background-color: white; position: relative; width: 80%; height: 80%; top: 10%; bottom: 10%; left: 10%; right: 10%;}.card img{width: 40%; height: auto; position: relative; right: 30%; left: 30%;}.card p{color: black; font-family: \"Arial Rounded MT Bold\"; text-align: center;}.title{padding-top: 5%; font-weight: bold; font-size: 20px; margin-left: 20%; margin-right: 20%; width: 60%;}.button{background-color: #57B7EB; border-radius: 5px; font-weight: bold; color: white; margin-left: 40%; margin-right: 40%; width: 20%;}</style></head><body><div class=\"container\"> <div class=\"card\"> <p class=\"title\">Recuperación de contraseña</p><br><img src=\"https://firebasestorage.googleapis.com/v0/b/lowlowburger.appspot.com/o/fast-food.png?alt=media&token=63594e85-5321-431b-b544-9fa33aa9b79c\"> <br><p>Hola, UserName</p><p>Has solicitado un cambio de contraseña.</p><br><button class=\"button\">Cambiar Contraseña</button> <p>Si no has sido tú el que solicitó el cambio, ignora este mensaje</p></div></div></body></html>";
         var transporter = nodemailer.createTransport({
             host:"smtp.gmail.com",
             port:587,
@@ -88,13 +88,25 @@ export const PasswordRecovery = async (req: Request, res: Response): Promise<Res
             }
         });
 
-        var options = {
+        var sendPwdReminder = transporter.templateSender(new EmailTemplate('../templates/passwordForm.html'), {
+            from: "Low Low Burger",
+        });
+
+        sendPwdReminder({
+            to: email,
+            subject: "Cambio de contraseña",
+        }, {
+            user:"lowlowburger@gmail.com",
+            pass:"Mr.cruji42"
+        });
+
+        /*var options = {
             from: "Low Low Burger",
             to: email,
             subject: "Cambio de contraseña",
             text:template
         }
-        transporter.sendMail(options);
+        transporter.sendMail(options);*/
     }catch(error){
         console.log(error);
         return res.status(500).json('internal server error');
