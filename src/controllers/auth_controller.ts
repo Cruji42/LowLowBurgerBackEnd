@@ -76,6 +76,7 @@ export const Register = async (req: Request, res: Response): Promise<Response> =
 // @ts-ignore
 export const PasswordRecovery = async (req: Request, res: Response): Promise<Response> => {
     try{
+        const {email} = req.body;
         var transporter = nodemailer.createTransport({
             host:"smtp.gmail.com",
             port:587,
@@ -88,10 +89,31 @@ export const PasswordRecovery = async (req: Request, res: Response): Promise<Res
 
         var options = {
             from: "Remitente",
-            to: "l.move971223@itses.edu.mx",
+            to: email,
             subject: "Cambio de contraseña",
-            text:"Aqui va el contenido del email"
-
+            text:"<!DOCTYPE html>\n" +
+                "<html lang=\"en\">\n" +
+                "<head>\n" +
+                "    <meta charset=\"UTF-8\">\n" +
+                "    <link rel=\"stylesheet\" href=\"..\templates\recover.css\">\n" +
+                "    <title>Reset Password</title>\n" +
+                "</head>\n" +
+                "<body>\n" +
+                "<div class=\"container\">\n" +
+                "    <div class=\"card\">\n" +
+                "        <p class=\"title\">Recuperación de contraseña</p>\n" +
+                "        <br>\n" +
+                "        <img src=\"https://firebasestorage.googleapis.com/v0/b/lowlowburger.appspot.com/o/fast-food.png?alt=media&token=63594e85-5321-431b-b544-9fa33aa9b79c\">\n" +
+                "        <br>\n" +
+                "        <p>Hola</p>\n" +
+                "        <p>Has solicitado un cambio de contraseña.</p>\n" +
+                "        <br>\n" +
+                "        <button class=\"button\">Cambiar Contraseña</button>\n" +
+                "        <p>Si no has sido tú el que solicitó el cambio, ignora este mensaje</p>\n" +
+                "    </div>\n" +
+                "</div>\n" +
+                "</body>\n" +
+                "</html>"
         }
         transporter.sendMail(options);
     }catch(error){
