@@ -80,7 +80,7 @@ export const Register = async (req: Request, res: Response): Promise<Response> =
 export const PasswordRecovery = async (req: Request, res: Response): Promise<Response> => {
     try{
         const {email} = req.body;
-       /* var transporter = nodemailer.createTransport({
+        var transporter = nodemailer.createTransport({
             host:"smtp.gmail.com",
             port:587,
             secure:false,
@@ -88,8 +88,7 @@ export const PasswordRecovery = async (req: Request, res: Response): Promise<Res
                 user:"lowlowburger@gmail.com",
                 pass:"Mr.cruji42"
             }
-        });*/
-        var transporter = nodemailer.createTransport();
+        });
         transporter.use('compile', htmlToText());
         transporter.sendMail({
             from: 'lowlowburger@gmail.com',
