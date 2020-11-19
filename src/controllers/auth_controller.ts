@@ -57,37 +57,33 @@ export const Register = async (req: Request, res: Response): Promise<Response> =
     }
 }
 
-/*export const PasswordRecovery = async (req: Request, res: Response): Promise<Response> => {
+export const ResetPassword = async (req: Request, res: Response): Promise<Response> => {
     try{
-        const {name, description, price, image} = req.body;
-        const response = await pool.query('INSERT INTO order (name, description, price, image)' +
-            ' VALUES ($1 , $2, $3, $4)', [name, description, price, image])
+        const {password} = req.body;
+        let token = req.params.token;
+
+        const response = await pool.query('UPDATE users SET  password= $1 WHERE email = $2',[password, req.params.email])
         return res.status(500).json({
-            message: 'Product added',
-            body:{
-                user:{
-                    name
-                }
-            }
+            message: 'Password changed'
         })
     }catch(error){
         console.log(error);
         return res.status(500).json('internal server error');
     }
-}*/
+}
 
 
 export const PasswordRecovery = async (req: Request, res: Response): Promise<Response> => {
     try{
         const {email} = req.body;
         const useremail = await email;
+        // Este link sera hacia el formulario enviando el token con el email dentro
+        const link = 'https://classic.minecraft.net/?join=OYoFoqvfbrAxYS9k';
         let options ={
             from: 'Low Low Burguer',
-            // Change this static email
-            // to: 'l.move971223@itses.edu.mx',
             to: useremail,
             subject: "Cambio de contraseña",
-            html: '<!DOCTYPE html><html lang="en"><head> <meta charset="UTF-8"> <link rel="stylesheet" href="recover.css"> <title>Reset Password</title> <style>.container{background-color: darkgray; position: fixed; width: 100%; height: 100%;}.card{background-color: white; position: relative; width: 80%; height: 80%; top: 10%; bottom: 10%; left: 10%; right: 10%;}.card img{width: 40%; height: auto; display: block; position: relative; left: 30%; right: 30%;}.card p{color: black; font-family: "Arial Rounded MT Bold"; text-align: center;}.title{padding-top: 5%; font-weight: bold; font-size: 20px; margin-left: 20%; margin-right: 20%; width: 60%;}.button{background-color: #57B7EB; border-radius: 5px; font-weight: bold; color: white; margin-left: 40%; margin-right: 40%; width: 20%;}</style></head><body><div class="container"> <div class="card"> <p class="title">Recuperación de contraseña</p><br><img src="https://firebasestorage.googleapis.com/v0/b/lowlowburger.appspot.com/o/fast-food.png?alt=media&token=63594e85-5321-431b-b544-9fa33aa9b79c"> <br><p>Hola</p><p>Has solicitado un cambio de contraseña.</p><br><button class="button">Cambiar Contraseña</button> <p>Si no has sido tú el que solicitó el cambio, ignora este mensaje</p></div></div></body></html>'
+            html: `<!DOCTYPE html><html lang="en"><head> <meta charset="UTF-8"> <link rel="stylesheet" href="recover.css"> <title>Reset Password</title> <style>.container{background-color: darkgray; position: fixed; width: 70%; height: 70%; top: 15%; right: 15%;}.card{background-color: white; position: relative; width: 70%; height: 70%; top: 15%; bottom: 15%; left: 15%; right: 15%; box-shadow: 5px 10px #888888;}.card img{width: 30%; height: auto; display: block; position: relative; left: 35%; right: 35%;}.card p{color: black; font-family: "Trebuchet MS", Helvetica, sans-serif; text-align: center;}.title{padding-top: 2%; font-weight: bold; font-size: 16px; margin-left: 10%; margin-right: 10%; width: 80%; text-align: center;}.button{border-radius: 5px; font-weight: bold; font-size: 11px; color: white; text-align: center; margin-left: 35%; margin-right: 35%; width: 30%; transition-duration: 0.4s; cursor: pointer; border: none; text-decoration: none; display: inline-block;}.button1{background-color: #008CBA; color: white; border: 2px solid #008CBA;}.button1:hover{background-color: #57B7EB; color: white;}</style></head><body><div class="container"> <div class="card"> <p class="title">Recuperación de contraseña</p><br><img src="https://firebasestorage.googleapis.com/v0/b/lowlowburger.appspot.com/o/fast-food.png?alt=media&token=63594e85-5321-431b-b544-9fa33aa9b79c"> <p>Has solicitado un cambio de contraseña.</p><a class="title" href=\"${ link }\" >Click aqui para cambiar contraseña</a> <p>Si no has sido tú el que solicitó el cambio, ignora este mensaje</p></div></div></body></html>`
         };
 
         let transporter = nodemailer.createTransport({
