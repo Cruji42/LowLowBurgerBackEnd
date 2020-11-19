@@ -3,6 +3,7 @@ import {pool} from '../enviroment/database'
 const bcrypt = require('bcrypt');
 var nodemailer = require('nodemailer');
 var htmlToText = require('nodemailer-html-to-text').htmlToText;
+const jwt = require("jsonwebtoken");
 
 
 
@@ -61,24 +62,48 @@ export const ResetPassword = async (req: Request, res: Response): Promise<Respon
     try{
         const {password} = req.body;
         let token = req.params.token;
+        const passwordEncrypted = await bcrypt.hash(password, 10);
+        var decoded = jwt.verify(token, 'secret');
+        if(decoded){
+            const response = await pool.query('UPDATE users SET  password= $1 WHERE email = $2',[passwordEncrypted, decoded.data])
+            return res.status(200).json({
+                tokendata: decoded.data
+            });
+        }else {
+            return res.status(500).json({
+                message: 'Not valid Token'
+            });
+        }
 
-        const response = await pool.query('UPDATE users SET  password= $1 WHERE email = $2',[password, req.params.email])
-        return res.status(500).json({
-            message: 'Password changed'
-        })
     }catch(error){
         console.log(error);
-        return res.status(500).json('internal server error');
+        return res.status(500).json('Not valid Token');
     }
 }
+
+export const TOKENGENERATE = async (req: Request, res: Response): Promise<Response> => {
+    try{
+        var token = await jwt.sign({
+            data: 'cruji42@gmail.com'
+        }, 'secret', { expiresIn: '15s' });
+        return res.status(500).json(token);
+    }catch(error){
+        console.log(error);
+        return res.status(500).json('No se puede generar el token');
+    }
+}
+
 
 
 export const PasswordRecovery = async (req: Request, res: Response): Promise<Response> => {
     try{
         const {email} = req.body;
         const useremail = await email;
+        var token = await jwt.sign({
+            data: useremail
+        }, 'secret', { expiresIn: '300s' });
         // Este link sera hacia el formulario enviando el token con el email dentro
-        const link = 'https://classic.minecraft.net/?join=OYoFoqvfbrAxYS9k';
+        const link = `https://classic.minecraft.net/${token}`;
         let options ={
             from: 'Low Low Burguer',
             to: useremail,
@@ -103,4 +128,6 @@ export const PasswordRecovery = async (req: Request, res: Response): Promise<Res
         return res.status(500).json('internal server error');
     }
 }
+
+
 

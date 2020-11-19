@@ -14,6 +14,8 @@ router.get('/', (req, res) => {
 router.post('/login', auth_controller_1.Login);
 router.post('/register', auth_controller_1.Register);
 router.post('/recovery', auth_controller_1.PasswordRecovery);
+router.post('/resetpass/:token', auth_controller_1.ResetPassword);
+router.post('/token', auth_controller_1.TOKENGENERATE);
 //User Routes
 router.get('/users', users_controller_1.getUsers);
 router.get('/users/:email', users_controller_1.getUserbyEmail);

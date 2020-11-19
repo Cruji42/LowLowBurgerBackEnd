@@ -2,7 +2,7 @@ import {Router} from 'express';
 import {deleteUser, getUserbyEmail, getUsers, updateUser} from '../controllers/users_controller';
 import {createProduct, deleteProduct, getProductbyId, getProducts, updateProduct} from '../controllers/products_controller';
 import {createOrder, deleteOrder, getOrderbyId, getOrders, updateOrder} from '../controllers/order_controller';
-import {Login, PasswordRecovery, Register} from "../controllers/auth_controller";
+import {Login, PasswordRecovery, Register, ResetPassword, TOKENGENERATE} from "../controllers/auth_controller";
 import {createToppings, deleteToppings, getToppings, getToppingsbyId, updateToppings } from "../controllers/toppings_controller";
 
 const router = Router();
@@ -18,6 +18,8 @@ router.get('/', (req, res)=> {
 router.post('/login', Login);
 router.post('/register', Register);
 router.post('/recovery', PasswordRecovery);
+router.post('/resetpass/:token', ResetPassword);
+router.post('/token', TOKENGENERATE);
 
 //User Routes
 router.get('/users', getUsers);
