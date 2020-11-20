@@ -12,6 +12,10 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.deleteUser = exports.updateUser = exports.createUser = exports.getUserbyEmail = exports.getUsers = void 0;
 const database_1 = require("../enviroment/database");
 exports.getUsers = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    res.header('Access-Control-Allow-Origin', '*');
+    res.header('Access-Control-Allow-Headers', 'Authorization, X-API-KEY, Origin, X-Requested-With, Content-Type, Accept, Access-Control-Allow-Request-Method');
+    res.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, DELETE');
+    res.header('Allow', 'GET, POST, OPTIONS, PUT, DELETE');
     try {
         const response = yield database_1.pool.query('SELECT * FROM users');
         console.log(response.rows);

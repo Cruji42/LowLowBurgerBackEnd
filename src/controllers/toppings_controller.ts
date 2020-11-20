@@ -5,6 +5,10 @@ import {QueryResult} from 'pg'
 
 
 export const getToppings = async (req: Request, res: Response): Promise<Response> => {
+    res.header('Access-Control-Allow-Origin', '*');
+    res.header('Access-Control-Allow-Headers', 'Authorization, X-API-KEY, Origin, X-Requested-With, Content-Type, Accept, Access-Control-Allow-Request-Method');
+    res.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, DELETE');
+    res.header('Allow', 'GET, POST, OPTIONS, PUT, DELETE');
     try {
         const response: QueryResult = await pool.query('SELECT * FROM toppings');
         console.log(response.rows);
@@ -16,6 +20,10 @@ export const getToppings = async (req: Request, res: Response): Promise<Response
 }
 
 export const getToppingsbyId = async (req: Request, res: Response): Promise<Response> => {
+    res.header('Access-Control-Allow-Origin', '*');
+    res.header('Access-Control-Allow-Headers', 'Authorization, X-API-KEY, Origin, X-Requested-With, Content-Type, Accept, Access-Control-Allow-Request-Method');
+    res.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, DELETE');
+    res.header('Allow', 'GET, POST, OPTIONS, PUT, DELETE');
     try{
         const Id = parseInt(req.params.id);
         const response = await pool.query('SELECT * FROM toppings WHERE id= $1', [Id]);
@@ -27,6 +35,10 @@ export const getToppingsbyId = async (req: Request, res: Response): Promise<Resp
 }
 
 export const createToppings = async (req: Request, res: Response): Promise<Response> => {
+    res.header('Access-Control-Allow-Origin', '*');
+    res.header('Access-Control-Allow-Headers', 'Authorization, X-API-KEY, Origin, X-Requested-With, Content-Type, Accept, Access-Control-Allow-Request-Method');
+    res.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, DELETE');
+    res.header('Allow', 'GET, POST, OPTIONS, PUT, DELETE');
     try{
         const {name, price} = req.body;
         const response = await pool.query('INSERT INTO toppings (name, price)' +
@@ -46,6 +58,10 @@ export const createToppings = async (req: Request, res: Response): Promise<Respo
 }
 
 export const updateToppings = async (req: Request, res: Response): Promise<Response> => {
+    res.header('Access-Control-Allow-Origin', '*');
+    res.header('Access-Control-Allow-Headers', 'Authorization, X-API-KEY, Origin, X-Requested-With, Content-Type, Accept, Access-Control-Allow-Request-Method');
+    res.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, DELETE');
+    res.header('Allow', 'GET, POST, OPTIONS, PUT, DELETE');
     try{
         const Id = parseInt(req.params.id);
         const {name, description, price, image} = req.body;
@@ -65,6 +81,10 @@ export const updateToppings = async (req: Request, res: Response): Promise<Respo
     }
 }
 export const deleteToppings = async (req: Request, res: Response): Promise<Response> => {
+    res.header('Access-Control-Allow-Origin', '*');
+    res.header('Access-Control-Allow-Headers', 'Authorization, X-API-KEY, Origin, X-Requested-With, Content-Type, Accept, Access-Control-Allow-Request-Method');
+    res.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, DELETE');
+    res.header('Allow', 'GET, POST, OPTIONS, PUT, DELETE');
     try{
         const Id = parseInt(req.params.id);
         const response = await pool.query('DELETE FROM toppings WHERE id= $1', [Id]);

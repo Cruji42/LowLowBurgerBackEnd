@@ -5,6 +5,10 @@ import {QueryResult} from 'pg'
 
 
 export const getProducts = async (req: Request, res: Response): Promise<Response> => {
+    res.header('Access-Control-Allow-Origin', '*');
+    res.header('Access-Control-Allow-Headers', 'Authorization, X-API-KEY, Origin, X-Requested-With, Content-Type, Accept, Access-Control-Allow-Request-Method');
+    res.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, DELETE');
+    res.header('Allow', 'GET, POST, OPTIONS, PUT, DELETE');
     try {
         const response: QueryResult = await pool.query('SELECT * FROM products');
         console.log(response.rows);
@@ -21,6 +25,10 @@ export const getProducts = async (req: Request, res: Response): Promise<Response
 }
 
 export const getProductbyId = async (req: Request, res: Response): Promise<Response> => {
+    res.header('Access-Control-Allow-Origin', '*');
+    res.header('Access-Control-Allow-Headers', 'Authorization, X-API-KEY, Origin, X-Requested-With, Content-Type, Accept, Access-Control-Allow-Request-Method');
+    res.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, DELETE');
+    res.header('Allow', 'GET, POST, OPTIONS, PUT, DELETE');
     try{
         const Id = parseInt(req.params.id);
         const response = await pool.query('SELECT * FROM products WHERE id= $1', [Id]);
@@ -32,6 +40,10 @@ export const getProductbyId = async (req: Request, res: Response): Promise<Respo
 }
 
 export const createProduct = async (req: Request, res: Response): Promise<Response> => {
+    res.header('Access-Control-Allow-Origin', '*');
+    res.header('Access-Control-Allow-Headers', 'Authorization, X-API-KEY, Origin, X-Requested-With, Content-Type, Accept, Access-Control-Allow-Request-Method');
+    res.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, DELETE');
+    res.header('Allow', 'GET, POST, OPTIONS, PUT, DELETE');
     try{
         const {name, description, price, image} = req.body;
         const response = await pool.query('INSERT INTO products (name, description, price, image)' +
@@ -51,6 +63,10 @@ export const createProduct = async (req: Request, res: Response): Promise<Respon
 }
 
 export const updateProduct = async (req: Request, res: Response): Promise<Response> => {
+    res.header('Access-Control-Allow-Origin', '*');
+    res.header('Access-Control-Allow-Headers', 'Authorization, X-API-KEY, Origin, X-Requested-With, Content-Type, Accept, Access-Control-Allow-Request-Method');
+    res.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, DELETE');
+    res.header('Allow', 'GET, POST, OPTIONS, PUT, DELETE');
     try{
         const Id = parseInt(req.params.id);
         const {name, description, price, image} = req.body;
@@ -70,6 +86,10 @@ export const updateProduct = async (req: Request, res: Response): Promise<Respon
     }
 }
 export const deleteProduct = async (req: Request, res: Response): Promise<Response> => {
+    res.header('Access-Control-Allow-Origin', '*');
+    res.header('Access-Control-Allow-Headers', 'Authorization, X-API-KEY, Origin, X-Requested-With, Content-Type, Accept, Access-Control-Allow-Request-Method');
+    res.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, DELETE');
+    res.header('Allow', 'GET, POST, OPTIONS, PUT, DELETE');
     try{
         const Id = parseInt(req.params.id);
         const response = await pool.query('DELETE FROM products WHERE id= $1', [Id]);

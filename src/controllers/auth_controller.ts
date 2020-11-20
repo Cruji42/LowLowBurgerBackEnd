@@ -10,6 +10,10 @@ const jwt = require("jsonwebtoken");
 
 // @ts-ignore
 export const Login = async (req: Request, res: Response): Promise<Response> => {
+    res.header('Access-Control-Allow-Origin', '*');
+    res.header('Access-Control-Allow-Headers', 'Authorization, X-API-KEY, Origin, X-Requested-With, Content-Type, Accept, Access-Control-Allow-Request-Method');
+    res.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, DELETE');
+    res.header('Allow', 'GET, POST, OPTIONS, PUT, DELETE');
     try {
         const {email, password} = req.body;
         let passwordencrypted = '';
@@ -38,6 +42,10 @@ export const Login = async (req: Request, res: Response): Promise<Response> => {
 }
 
 export const Register = async (req: Request, res: Response): Promise<Response> => {
+    res.header('Access-Control-Allow-Origin', '*');
+    res.header('Access-Control-Allow-Headers', 'Authorization, X-API-KEY, Origin, X-Requested-With, Content-Type, Accept, Access-Control-Allow-Request-Method');
+    res.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, DELETE');
+    res.header('Allow', 'GET, POST, OPTIONS, PUT, DELETE');
     try{
         const {name, last_name, address, email, password, phone_number} = req.body;
         const passwordEncrypted = await bcrypt.hash(password, 10);
@@ -59,6 +67,10 @@ export const Register = async (req: Request, res: Response): Promise<Response> =
 }
 
 export const ResetPassword = async (req: Request, res: Response): Promise<Response> => {
+    res.header('Access-Control-Allow-Origin', '*');
+    res.header('Access-Control-Allow-Headers', 'Authorization, X-API-KEY, Origin, X-Requested-With, Content-Type, Accept, Access-Control-Allow-Request-Method');
+    res.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, DELETE');
+    res.header('Allow', 'GET, POST, OPTIONS, PUT, DELETE');
     try{
         const {password} = req.body;
         let token = req.params.token;
@@ -82,6 +94,10 @@ export const ResetPassword = async (req: Request, res: Response): Promise<Respon
 }
 
 export const TOKENGENERATE = async (req: Request, res: Response): Promise<Response> => {
+    res.header('Access-Control-Allow-Origin', '*');
+    res.header('Access-Control-Allow-Headers', 'Authorization, X-API-KEY, Origin, X-Requested-With, Content-Type, Accept, Access-Control-Allow-Request-Method');
+    res.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, DELETE');
+    res.header('Allow', 'GET, POST, OPTIONS, PUT, DELETE');
     try{
         var token = await jwt.sign({
             data: 'cruji42@gmail.com'
@@ -96,6 +112,10 @@ export const TOKENGENERATE = async (req: Request, res: Response): Promise<Respon
 
 
 export const PasswordRecovery = async (req: Request, res: Response): Promise<Response> => {
+    res.header('Access-Control-Allow-Origin', '*');
+    res.header('Access-Control-Allow-Headers', 'Authorization, X-API-KEY, Origin, X-Requested-With, Content-Type, Accept, Access-Control-Allow-Request-Method');
+    res.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, DELETE');
+    res.header('Allow', 'GET, POST, OPTIONS, PUT, DELETE');
     try{
         const {email} = req.body;
         const useremail = await email;

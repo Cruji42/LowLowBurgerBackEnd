@@ -5,6 +5,10 @@ import {QueryResult} from 'pg'
 
 
 export const getOrders = async (req: Request, res: Response): Promise<Response> => {
+    res.header('Access-Control-Allow-Origin', '*');
+    res.header('Access-Control-Allow-Headers', 'Authorization, X-API-KEY, Origin, X-Requested-With, Content-Type, Accept, Access-Control-Allow-Request-Method');
+    res.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, DELETE');
+    res.header('Allow', 'GET, POST, OPTIONS, PUT, DELETE');
     try {
         const response: QueryResult = await pool.query('SELECT * FROM public.order');
         console.log(response.rows);
@@ -16,6 +20,10 @@ export const getOrders = async (req: Request, res: Response): Promise<Response> 
 }
 
 export const getOrderbyId = async (req: Request, res: Response): Promise<Response> => {
+    res.header('Access-Control-Allow-Origin', '*');
+    res.header('Access-Control-Allow-Headers', 'Authorization, X-API-KEY, Origin, X-Requested-With, Content-Type, Accept, Access-Control-Allow-Request-Method');
+    res.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, DELETE');
+    res.header('Allow', 'GET, POST, OPTIONS, PUT, DELETE');
     try{
         const Id = parseInt(req.params.id);
         const response = await pool.query('SELECT t1.image, t1.name,t2.amount, t1.price*t2.amount as sub_total from products as t1\n' +
@@ -28,6 +36,10 @@ export const getOrderbyId = async (req: Request, res: Response): Promise<Respons
 }
 
 export const createOrder = async (req: Request, res: Response): Promise<Response> => {
+    res.header('Access-Control-Allow-Origin', '*');
+    res.header('Access-Control-Allow-Headers', 'Authorization, X-API-KEY, Origin, X-Requested-With, Content-Type, Accept, Access-Control-Allow-Request-Method');
+    res.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, DELETE');
+    res.header('Allow', 'GET, POST, OPTIONS, PUT, DELETE');
     try{
         const {user, products} = req.body;
         /*this is how the function call looks like
@@ -59,6 +71,10 @@ export const createOrder = async (req: Request, res: Response): Promise<Response
 }
 
 export const updateOrder = async (req: Request, res: Response): Promise<Response> => {
+    res.header('Access-Control-Allow-Origin', '*');
+    res.header('Access-Control-Allow-Headers', 'Authorization, X-API-KEY, Origin, X-Requested-With, Content-Type, Accept, Access-Control-Allow-Request-Method');
+    res.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, DELETE');
+    res.header('Allow', 'GET, POST, OPTIONS, PUT, DELETE');
     try{
         const Id = parseInt(req.params.id);
         const {name, description, price, image, id} = req.body;
@@ -78,6 +94,10 @@ export const updateOrder = async (req: Request, res: Response): Promise<Response
     }
 }
 export const deleteOrder = async (req: Request, res: Response): Promise<Response> => {
+    res.header('Access-Control-Allow-Origin', '*');
+    res.header('Access-Control-Allow-Headers', 'Authorization, X-API-KEY, Origin, X-Requested-With, Content-Type, Accept, Access-Control-Allow-Request-Method');
+    res.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, DELETE');
+    res.header('Allow', 'GET, POST, OPTIONS, PUT, DELETE');
     try{
         const Id = parseInt(req.params.id);
         const response = await pool.query('DELETE FROM order WHERE id= $1', [Id]);
