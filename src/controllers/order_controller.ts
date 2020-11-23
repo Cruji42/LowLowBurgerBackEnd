@@ -46,18 +46,18 @@ export const createOrder = async (req: Request, res: Response): Promise<Response
         select Make_Order(2,Array[
             row(1,'Instruccion 1',1,'{1,3,5}'),
                 row(2,'Instruccion 1',2,'{1,2}')]::order_product[])*/
-        let arraySize = products.length;
+        let arraySize = products.length-1;
         let product = '';
-
-        if(arraySize == 1){
+        if(arraySize == 0){
             product = `row( ${products[0].amount},'${products[0].instructions}',${products[0].id_product},'{ ${products[0].toppings} }')`;
         }else {
          for(let i=0; i < arraySize; i++){
                 product = product + `row( ${products[i].amount},'${products[i].instructions}',${products[i].id_product},'{ ${products[i].toppings} }'),`;
+                console.log('primeros'+ product);
             }
             product = product + `row( ${products[arraySize].amount},'${products[arraySize].instructions}',${products[arraySize].id_product},'{ ${products[arraySize].toppings} }')`;
+            console.log(product);
         }
-
         let debug = `SELECT make_order(${user}, '${delivery}'::timestamp, '${address}'::text Array[ ${product} ] ::order_product[])`
         const response = await pool.query(debug);
         console.log('Este es el query' + debug);
