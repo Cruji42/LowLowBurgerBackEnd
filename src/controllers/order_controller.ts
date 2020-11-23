@@ -46,7 +46,7 @@ export const createOrder = async (req: Request, res: Response): Promise<Response
         select Make_Order(2,Array[
             row(1,'Instruccion 1',1,'{1,3,5}'),
                 row(2,'Instruccion 1',2,'{1,2}')]::order_product[])*/
-        let arraySize = products.length - 1;
+        let arraySize = products.length;
         let product = '';
 
         if(arraySize == 1){
