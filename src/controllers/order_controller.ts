@@ -58,7 +58,7 @@ export const createOrder = async (req: Request, res: Response): Promise<Response
             product = product + `row( ${products[arraySize].amount},'${products[arraySize].instructions}',${products[arraySize].id_product},'{ ${products[arraySize].toppings} }')`;
         }
 
-        let debug = `SELECT Make_Order(${user}, ${delivery}, ${address} Array[ ${product} ] ::order_product[])`
+        let debug = `SELECT make_order(${user}, ${delivery}::timestamp, ${address}::text Array[ ${product} ] ::order_product[])`
         const response = await pool.query(debug);
         return res.status(500).json({
             "message": 'ORDER CREATED',
