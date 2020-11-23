@@ -53,14 +53,12 @@ export const createOrder = async (req: Request, res: Response): Promise<Response
         }else {
          for(let i=0; i < arraySize; i++){
                 product = product + `row( ${products[i].amount},'${products[i].instructions}',${products[i].id_product},'{ ${products[i].toppings} }'),`;
-                console.log('primeros'+ product);
             }
             product = product + `row( ${products[arraySize].amount},'${products[arraySize].instructions}',${products[arraySize].id_product},'{ ${products[arraySize].toppings} }')`;
-            console.log(product);
         }
-        let debug = `SELECT make_order(${user}, '${delivery}'::timestamp, '${address}'::text Array[ ${product} ] ::order_product[])`
-        const response = await pool.query(debug);
+        let debug = `SELECT make_order(${user}, '${delivery}'::timestamp, '${address}'::text, Array[ ${product} ] ::order_product[])`
         console.log('Este es el query' + debug);
+        const response = await pool.query(debug);
         return res.status(500).json({
             "message": 'ORDER CREATED',
             "data": debug
