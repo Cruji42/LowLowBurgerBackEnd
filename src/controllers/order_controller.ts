@@ -41,7 +41,7 @@ export const createOrder = async (req: Request, res: Response): Promise<Response
     res.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, DELETE');
     res.header('Allow', 'GET, POST, OPTIONS, PUT, DELETE');
     try{
-        const {user, products} = req.body;
+        const {user, delivery, address, products} = req.body;
         /*this is how the function call looks like
         select Make_Order(2,Array[
             row(1,'Instruccion 1',1,'{1,3,5}'),
@@ -58,7 +58,7 @@ export const createOrder = async (req: Request, res: Response): Promise<Response
             product = product + `row( ${products[arraySize].amount},'${products[arraySize].instructions}',${products[arraySize].id_product},'{ ${products[arraySize].toppings} }')`;
         }
 
-        let debug = `SELECT Make_Order(${user}, Array[ ${product} ] ::order_product[])`
+        let debug = `SELECT Make_Order(${user}, ${delivery}, ${address} Array[ ${product} ] ::order_product[])`
         const response = await pool.query(debug);
         return res.status(500).json({
             "message": 'ORDER CREATED',
