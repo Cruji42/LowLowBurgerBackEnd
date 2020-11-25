@@ -1,5 +1,7 @@
-import {Pool} from 'pg';
-
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.pool = void 0;
+const pg_1 = require("pg");
 // DEPLOY
 // export const pool = new Pool({
 //     user:'ikdpcqjiaqzovf',
@@ -8,12 +10,10 @@ import {Pool} from 'pg';
 //     database:'d8rdvtof32nulh',
 //     port: 5432
 // });
-
-export const pool = new Pool({
-    user:'postgres',
-    host:'localhost',
-    password:' ',
-    database:'LLB_Local',
+exports.pool = new pg_1.Pool({
+    user: 'postgres',
+    host: 'localhost',
+    password: ' ',
+    database: 'LLB_Local',
     port: 5432
 });
-

@@ -26,7 +26,7 @@ export const getUserbyEmail = async (req: Request, res: Response): Promise<Respo
     res.header('Allow', 'GET, POST, OPTIONS, PUT, DELETE');
     try{
         const response = await pool.query('SELECT * FROM users WHERE email= $1', [req.params.email]);
-        return res.json(response.rows);
+        return res.json({"user":response.rows});
     }catch(error){
 console.log(error);
 return res.status(500).json('internal server error');
