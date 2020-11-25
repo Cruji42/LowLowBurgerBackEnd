@@ -11,9 +11,9 @@ const jwt = require("jsonwebtoken");
 // @ts-ignore
 export const Login = async (req: Request, res: Response): Promise<Response> => {
     res.header('Access-Control-Allow-Origin', '*');
-    res.header('Access-Control-Allow-Headers', 'Authorization, X-API-KEY, Origin, X-Requested-With, Content-Type, Accept, Access-Control-Allow-Request-Method');
-    res.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, DELETE');
-    res.header('Allow', 'GET, POST, OPTIONS, PUT, DELETE');
+    res.header('Access-Control-Allow-Headers', '*');
+    res.header('Access-Control-Allow-Methods', '*');
+    res.header('Allow', '*');
     try {
         const {email, password} = req.body;
         let passwordencrypted = '';

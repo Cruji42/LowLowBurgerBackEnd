@@ -178,7 +178,6 @@ order by t5.folio`;
         return res.status(500).json('internal server error');
     }
 }
-
 export const createOrder = async (req: Request, res: Response): Promise<Response> => {
     res.header('Access-Control-Allow-Origin', '*');
     res.header('Access-Control-Allow-Headers', 'Authorization, X-API-KEY, Origin, X-Requested-With, Content-Type, Accept, Access-Control-Allow-Request-Method');
@@ -212,7 +211,6 @@ export const createOrder = async (req: Request, res: Response): Promise<Response
         return res.status(500).json('Internal server error');
     }
 }
-
 export const updateOrder = async (req: Request, res: Response): Promise<Response> => {
     res.header('Access-Control-Allow-Origin', '*');
     res.header('Access-Control-Allow-Headers', 'Authorization, X-API-KEY, Origin, X-Requested-With, Content-Type, Accept, Access-Control-Allow-Request-Method');
