@@ -11,6 +11,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.deleteOrder = exports.updateOrder = exports.createOrder = exports.getOrderbyId = exports.getOrders = void 0;
 const database_1 = require("../enviroment/database");
+// const Id = req.params.id;
 exports.getOrders = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     res.header('Access-Control-Allow-Origin', '*');
     res.header('Access-Control-Allow-Headers', 'Authorization, X-API-KEY, Origin, X-Requested-With, Content-Type, Accept, Access-Control-Allow-Request-Method');
@@ -52,23 +53,41 @@ exports.getOrders = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
             't6.last_name\n' +
             'order by t5.folio';
         const response = yield database_1.pool.query(sql);
-        data['orders']['folio'] = response.rows[0]['orden'];
-        data['orders']['user'] = response.rows[0]['cliente'];
-        data['orders']['delivery'] = response.rows[0]['fecha'];
-        data['orders']['address'] = response.rows[0]['dirección'];
-        for (let i = 0; i < response.rowCount; i++) {
-            product['amount'] = response.rows[i]['producto'][0];
-            product['product'] = response.rows[i]['producto'][1];
-            product['instructions'] = response.rows[i]['producto'][2];
-            product['toppings'] = response.rows[i]['producto'][3];
-            // @ts-ignore
-            data[`orders`]['products'][i] = product;
-            product = {
-                "amount": "",
-                "instructions": "",
-                "product": "",
-                "toppings": []
-            };
+        /*  data['orders']['folio'] = response.rows[0]['orden'];
+          data['orders']['user'] = response.rows[0]['cliente'];
+          data['orders']['delivery'] = response.rows[0]['fecha'];
+          data['orders']['address'] = response.rows[0]['dirección'];*/
+        for (let i = 0; i < response.rowCount - 1; i++) {
+            let folio = response.rows[i]['orden'];
+            let next_folio = response.rows[i + 1]['orden'];
+            if (next_folio = folio) {
+                data['orders']['folio'] = response.rows[i]['orden'];
+                data['orders']['user'] = response.rows[i]['cliente'];
+                data['orders']['delivery'] = response.rows[i]['fecha'];
+                data['orders']['address'] = response.rows[i]['dirección'];
+            }
+            else {
+                data['orders']['folio'] = response.rows[i + 1]['orden'];
+                data['orders']['user'] = response.rows[i + 1]['cliente'];
+                data['orders']['delivery'] = response.rows[i + 1]['fecha'];
+                data['orders']['address'] = response.rows[i + 1]['dirección'];
+            }
+            /*      data['orders']['folio'] = response.rows[i]['orden'];
+                    data['orders']['user'] = response.rows[i]['cliente'];
+                    data['orders']['delivery'] = response.rows[i]['fecha'];
+                    data['orders']['address'] = response.rows[i]['dirección'];
+                    product['amount'] = response.rows[i]['producto'][0];
+                    product['product'] = response.rows[i]['producto'][1];
+                    product['instructions'] = response.rows[i]['producto'][2];
+                    product['toppings'] = response.rows[i]['producto'][3];
+                    // @ts-ignore
+                    data[`orders`]['products'][i] =  product;
+                    product = {
+                        "amount": "",
+                        "instructions": "",
+                        "product": "",
+                        "toppings": []
+                    }*/
         }
         /*
                 product['amount'] = response.rows[1]['producto'][0];
@@ -92,26 +111,61 @@ exports.getOrderbyId = (req, res) => __awaiter(void 0, void 0, void 0, function*
     res.header('Allow', 'GET, POST, OPTIONS, PUT, DELETE');
     try {
         const Id = req.params.id;
-        let sql = 'Select distinct t5.folio orden, t6.name cliente, t5.delivery_address dirección, \n' +
-            '(select array[t2.amount::text, t1.name, t2.instructions, replace(replace(array_agg(t4.name)::text,\'{\',\'\'),\'}\',\'\') ]) producto\n' +
-            'from products as t1\n' +
-            'join order_item as t2 on t1.id = t2.products_id\n' +
-            'join order_item_has_toppings t3 on t3.order_item_order_id = t2.id\n' +
-            'join toppings as t4 on t4.id = t3.toppings_id\n' +
-            'join public.order as t5 on t5.id = t2.order_id\n' +
-            'join users as t6 on t6.id = t5.user_id\n' +
-            'where t5.folio = ' + '\'' + Id + '\'' +
-            'group by\n' +
-            't1.name,\n' +
-            't2.amount,\n' +
-            't2.instructions,\n' +
-            't2.id,\n' +
-            't5.folio,\n' +
-            't6.name,\n' +
-            't5.delivery_address\n' +
-            'order by t5.folio';
+        let data = {
+            "orders": {
+                "folio": "",
+                "user": "",
+                "delivery": "",
+                "address": "",
+                "products": []
+            }
+        };
+        let product = {
+            "amount": "",
+            "instructions": "",
+            "product": "",
+            "toppings": []
+        };
+        let sql = `Select distinct t5.folio orden, t6.name cliente, t5.delivery_address dirección, t5.delivery_date fecha,
+(select array[t2.amount::text, t1.name, t2.instructions, replace(replace(array_agg(t4.name)::text,'{',''),'}','') ]) as producto
+from products as t1
+join order_item as t2 on t1.id = t2.products_id
+join order_item_has_toppings t3 on t3.order_item_order_id = t2.id
+join toppings as t4 on t4.id = t3.toppings_id
+join public.order as t5 on t5.id = t2.order_id
+join users as t6 on t6.id = t5.user_id
+where t5.folio = '${Id}'
+group by
+t1.name,
+t2.amount,
+t2.instructions,
+t2.id,
+t5.folio,
+t6.name,
+t5.delivery_address,
+t5.delivery_date
+order by t5.folio`;
         const response = yield database_1.pool.query(sql);
-        return res.json(response.rows);
+        data['orders']['folio'] = response.rows[0]['orden'];
+        data['orders']['user'] = response.rows[0]['cliente'];
+        data['orders']['delivery'] = response.rows[0]['fecha'];
+        data['orders']['address'] = response.rows[0]['dirección'];
+        for (let i = 0; i < response.rowCount; i++) {
+            product['amount'] = response.rows[i]['producto'][0];
+            product['product'] = response.rows[i]['producto'][1];
+            product['instructions'] = response.rows[i]['producto'][2];
+            product['toppings'] = response.rows[i]['producto'][3];
+            // @ts-ignore
+            data[`orders`]['products'][i] = product;
+            product = {
+                "amount": "",
+                "instructions": "",
+                "product": "",
+                "toppings": []
+            };
+        }
+        console.log(response.rows);
+        return res.status(200).json(data);
     }
     catch (error) {
         console.log(error);
