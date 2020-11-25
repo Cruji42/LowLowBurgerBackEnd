@@ -36,12 +36,12 @@ exports.Login = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
                         return res.status(200).json(response.rows);
                     }
                     else {
-                        return res.status(500).json('Password Incorrect');
+                        return res.status(401).json('Password Incorrect');
                     }
                 });
             }
             else {
-                return res.status(500).json('User not found');
+                return res.status(404).json('User not found');
             }
         });
     }

@@ -30,11 +30,11 @@ export const Login = async (req: Request, res: Response): Promise<Response> => {
                 if(result){
                     return res.status(200).json(response.rows);
                 }else {
-                    return res.status(500).json('Password Incorrect');
+                    return res.status(401).json('Password Incorrect');
                 }
             });
         }else {
-            return res.status(500).json('User not found');
+            return res.status(404).json('User not found');
         }
             })
 
