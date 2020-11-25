@@ -43,8 +43,27 @@ export const getOrderbyId = async (req: Request, res: Response): Promise<Respons
     res.header('Allow', 'GET, POST, OPTIONS, PUT, DELETE');
     try{
         const Id = parseInt(req.params.id);
-        const response = await pool.query('SELECT t1.image, t1.name,t2.amount, t1.price*t2.amount as sub_total from products as t1\n' +
-            'join order_item as t2 on t1.id = t2.products_id where t2.order_id= $1', [Id]);
+        let sql ='Select distinct t5.folio orden, t6.name cliente, t5.delivery_address dirección, \n' +
+            '(select array[t2.amount::text, t1.name, t2.instructions, replace(replace(array_agg(t4.name)::text,\'{\',\'\'),\'}\',\'\') ]) producto\n' +
+            'from products as t1\n' +
+            'join order_item as t2 on t1.id = t2.products_id\n' +
+            'join order_item_has_toppings t3 on t3.order_item_order_id = t2.id\n' +
+            'join toppings as t4 on t4.id = t3.toppings_id\n' +
+            'join public.order as t5 on t5.id = t2.order_id\n' +
+            'join users as t6 on t6.id = t5.user_id\n' +
+            'where t5.folio = \'' +
+            Id +
+            '\'\n' +
+            'group by\n' +
+            't1.name,\n' +
+            't2.amount,\n' +
+            't2.instructions,\n' +
+            't2.id,\n' +
+            't5.folio,\n' +
+            't6.name,\n' +
+            't5.delivery_address\n' +
+            'order by t5.folio';
+        const response = await pool.query(sql);
         return res.json(response.rows);
     }catch(error){
         console.log(error);
