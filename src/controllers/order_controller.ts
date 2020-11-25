@@ -10,8 +10,8 @@ export const getOrders = async (req: Request, res: Response): Promise<Response> 
     res.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, DELETE');
     res.header('Allow', 'GET, POST, OPTIONS, PUT, DELETE');
     try {
-        let sql='Select distinct t5.folio orden, t6.name, t5.delivery_address, \n' +
-            '(select array[\'Cantidad: \'||t2.amount::text, t1.name, t2.instructions, \'extras: \'|| array_agg(t4.name)::text])\n' +
+        let sql='Select distinct t5.folio orden, t6.name cliente, t5.delivery_address dirección, \n' +
+            '(select array[t2.amount::text, t1.name, t2.instructions, array_agg(t4.name)::text]) producto\n' +
             'from products as t1\n' +
             'join order_item as t2 on t1.id = t2.products_id\n' +
             'join order_item_has_toppings t3 on t3.order_item_order_id = t2.id\n' +
