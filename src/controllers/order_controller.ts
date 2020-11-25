@@ -51,9 +51,7 @@ export const getOrderbyId = async (req: Request, res: Response): Promise<Respons
             'join toppings as t4 on t4.id = t3.toppings_id\n' +
             'join public.order as t5 on t5.id = t2.order_id\n' +
             'join users as t6 on t6.id = t5.user_id\n' +
-            'where t5.folio = \'' +
-            Id +
-            '\'\n' +
+            'where t5.folio = ' + '\'' +Id+ '\''  +
             'group by\n' +
             't1.name,\n' +
             't2.amount,\n' +
@@ -95,7 +93,7 @@ export const createOrder = async (req: Request, res: Response): Promise<Response
         let debug = `SELECT make_order(${user}, '${delivery}'::timestamp, '${address}'::text, Array[ ${product} ] ::order_product[])`
         console.log('Este es el query' + debug);
         const response = await pool.query(debug);
-        return res.status(500).json({
+        return res.status(201).json({
             "message": 'ORDER CREATED',
             "data": debug
         })
