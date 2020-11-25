@@ -29,7 +29,7 @@ export const getOrders = async (req: Request, res: Response): Promise<Response> 
             'order by t5.folio';
         const response: QueryResult = await pool.query(sql);
         console.log(response.rows);
-        return res.status(200).json(response.rows);
+        return res.status(200).json({orders:response.rows});
     } catch (error) {
         console.log(error);
         return res.status(500).json('internal server error');
