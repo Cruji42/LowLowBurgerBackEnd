@@ -1,4 +1,4 @@
-import {Request, Response} from 'express'
+import {json, Request, Response} from 'express'
 import {pool} from '../enviroment/database'
 import {QueryResult} from 'pg'
 
@@ -16,14 +16,15 @@ export const getOrders = async (req: Request, res: Response): Promise<Response> 
                 "user":"",
                 "delivery":"",
                 "address":"",
-                "products":{
-                    "amount": "",
-                    "instructions": "",
-                    "product": "",
-                    "toppings": []
-                }
+                "products":[]
             }
         };
+        let product = {
+            "amount": "",
+            "instructions": "",
+            "product": "",
+            "toppings": []
+        }
         let sql='Select distinct t5.folio orden, concat(t6.name ||\' \'|| t6.last_name) cliente, t5.delivery_address dirección, t5.delivery_date as fecha, \n' +
             '(select array[t2.amount::text, t1.name, t2.instructions, replace(replace(array_agg(t4.name)::text,\'{\',\'\'),\'}\',\'\') ]) as producto\n' +
             'from products as t1\n' +
@@ -44,22 +45,36 @@ export const getOrders = async (req: Request, res: Response): Promise<Response> 
             't6.last_name\n' +
             'order by t5.folio';
         const response: QueryResult = await pool.query(sql);
-        console.log(response.rows[0]['orden']);
-        for (let i = 1; i<response.rowCount; i++){
-            if (response.rows[i-1]['orden'] = response.rows[i]['orden']){
-            }
-        }
+
+
         data['orders']['folio'] = response.rows[0]['orden'];
         data['orders']['user'] = response.rows[0]['cliente'];
         data['orders']['delivery'] = response.rows[0]['fecha'];
         data['orders']['address'] = response.rows[0]['dirección'];
-        data['orders']['products']['amount']= response.rows[0]['producto'][0];
-        data['orders']['products']['product']= response.rows[0]['producto'][1];
-        data['orders']['products']['instructions']= response.rows[0]['producto'][2];
-        data['orders']['products']['toppings']= response.rows[0]['producto'][3];
 
+        for (let i = 0; i<response.rowCount; i++){
+            product['amount'] = response.rows[i]['producto'][0];
+            product['product'] = response.rows[i]['producto'][1];
+            product['instructions'] = response.rows[i]['producto'][2];
+            product['toppings'] = response.rows[i]['producto'][3];
+            data['orders']['products'][i] =  product;
+            product = {
+                "amount": "",
+                "instructions": "",
+                "product": "",
+                "toppings": []
+            }
+        }
 
-        console.log(response.rows[0]['producto'][1]);
+/*
+        product['amount'] = response.rows[1]['producto'][0];
+        product['product'] = response.rows[1]['producto'][1];
+        product['instructions'] = response.rows[1]['producto'][2];
+        product['toppings'] = response.rows[1]['producto'][3];
+
+        data['orders']['products'][1]=  product;*/
+        //console.log(product);
+
         return res.status(200).json(data);
     } catch (error) {
         console.log(error);

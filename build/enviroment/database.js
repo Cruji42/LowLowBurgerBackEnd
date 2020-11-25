@@ -10,12 +10,10 @@ exports.pool = new pg_1.Pool({
     database: 'd8rdvtof32nulh',
     port: 5432
 });
-/*
-export const pool = new Pool({
+/*export const pool = new Pool({
     user:'postgres',
     host:'localhost',
     password:' ',
     database:'LLB_Local',
     port: 5432
-});
-*/
+});*/
