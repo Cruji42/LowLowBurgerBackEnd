@@ -57,7 +57,8 @@ export const getOrders = async (req: Request, res: Response): Promise<Response> 
             product['product'] = response.rows[i]['producto'][1];
             product['instructions'] = response.rows[i]['producto'][2];
             product['toppings'] = response.rows[i]['producto'][3];
-            data['orders']['products'][i] =  product;
+            // @ts-ignore
+            data[`orders`]['products'][i] =  product;
             product = {
                 "amount": "",
                 "instructions": "",
