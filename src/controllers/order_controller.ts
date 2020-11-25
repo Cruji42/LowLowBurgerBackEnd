@@ -42,7 +42,7 @@ export const getOrderbyId = async (req: Request, res: Response): Promise<Respons
     res.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, DELETE');
     res.header('Allow', 'GET, POST, OPTIONS, PUT, DELETE');
     try{
-        const Id = parseInt(req.params.id);
+        const Id = req.params.id;
         let sql ='Select distinct t5.folio orden, t6.name cliente, t5.delivery_address dirección, \n' +
             '(select array[t2.amount::text, t1.name, t2.instructions, replace(replace(array_agg(t4.name)::text,\'{\',\'\'),\'}\',\'\') ]) producto\n' +
             'from products as t1\n' +
