@@ -18,8 +18,10 @@ const jwt = require("jsonwebtoken");
 // @ts-ignore
 exports.Login = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     res.header('Access-Control-Allow-Origin', '*');
-    res.header('Access-Control-Allow-Headers', '*');
+    res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
     res.header('Access-Control-Allow-Methods', '*');
+    res.header('Access-Control-Allow-Origin', '*');
+    res.header('Content-Type', 'application/json; charset=utf-8');
     res.header('Allow', '*');
     try {
         const { email, password } = req.body;
