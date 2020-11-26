@@ -244,13 +244,13 @@ exports.getOrders = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
     try {
         //va a traer los json
         let orders = [];
-        let data = {
-            "folio": "",
-            "user": "",
-            "delivery": "",
-            "address": "",
-            "products": []
-        };
+        let data = [{
+                "folio": "",
+                "user": "",
+                "delivery": "",
+                "address": "",
+                "products": []
+            }];
         let product = {
             "amount": "",
             "instructions": "",
@@ -280,15 +280,14 @@ exports.getOrders = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
             // console.log(folios);
             for (var folios_1 = __asyncValues(folios), folios_1_1; folios_1_1 = yield folios_1.next(), !folios_1_1.done;) {
                 let i = folios_1_1.value;
-                let sql = `Select distinct t5.folio orden, t6.name cliente, t5.delivery_address dirección, t5.delivery_date fecha,
-(select array[t2.amount::text, t1.name, t2.instructions, replace(replace(array_agg(t4.name)::text,'{',''),'}','') ]) as producto
+                let sql = `Select distinct t5.folio orden, t6.name cliente, t5.state,t5.total, t5.delivery_address dirección, t5.delivery_date fecha
+--(select array[t2.amount::text, t1.name, t2.instructions, replace(replace(array_agg(t4.name)::text,'{',''),'}','') ]) as producto
 from products as t1
 join order_item as t2 on t1.id = t2.products_id
 join order_item_has_toppings t3 on t3.order_item_order_id = t2.id
 join toppings as t4 on t4.id = t3.toppings_id
 join public.order as t5 on t5.id = t2.order_id
 join users as t6 on t6.id = t5.user_id
-where t5.folio = '${i}'
 group by
 t1.name,
 t2.amount,
@@ -297,29 +296,33 @@ t2.id,
 t5.folio,
 t6.name,
 t5.delivery_address,
+t5.state,
+t5.total, 
 t5.delivery_date
 order by t5.folio`;
-                let response = yield database_1.pool.query(sql);
-                data['folio'] = response.rows[0]['orden'];
-                data['user'] = response.rows[0]['cliente'];
-                data['delivery'] = response.rows[0]['fecha'];
-                data['address'] = response.rows[0]['dirección'];
-                for (let i = 0; i < response.rowCount; i++) {
-                    product['amount'] = response.rows[i]['producto'][0];
-                    product['product'] = response.rows[i]['producto'][1];
-                    product['instructions'] = response.rows[i]['producto'][2];
-                    product['toppings'] = response.rows[i]['producto'][3];
-                    // @ts-ignore
-                    data['products'][i] = product;
-                    product = {
-                        "amount": "",
-                        "instructions": "",
-                        "product": "",
-                        "toppings": []
-                    };
-                }
-                // console.log(data);
-                orders.push(data);
+                const response = yield database_1.pool.query(sql);
+                /*data[counter2]['folio'] = response.rows[counter2]['orden'];
+                data[counter2]['user'] = response.rows[counter2]['cliente'];
+                data[counter2]['delivery'] = response.rows[counter2]['fecha'];
+                data[counter2]['address'] = response.rows[counter2]['dirección'];*/
+                orders[0] = response.rows;
+                /*            for (let i = 0; i<response.rowCount; i++){
+                                product['amount'] = response.rows[i]['producto'][0];
+                                product['product'] = response.rows[i]['producto'][1];
+                                product['instructions'] = response.rows[i]['producto'][2];
+                                product['toppings'] = response.rows[i]['producto'][3];
+                                // @ts-ignore
+                                data['products'][i] =  product;
+                                product = {
+                                    "amount": "",
+                                    "instructions": "",
+                                    "product": "",
+                                    "toppings": []
+                                }
+                                // console.log(data);
+                                orders[i]= data;
+                            }*/
+                counter2 = counter2++;
             }
         }
         catch (e_2_1) { e_2 = { error: e_2_1 }; }
@@ -352,7 +355,6 @@ order by t5.folio`;
             }
             orders[i] = data;
         }*/
-        console.log(orders);
         return res.status(200).json({ orders });
     }
     catch (error) {
