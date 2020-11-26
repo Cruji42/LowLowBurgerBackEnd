@@ -276,7 +276,7 @@ order by t5.folio`;
             data[counter2]['user'] = response.rows[counter2]['cliente'];
             data[counter2]['delivery'] = response.rows[counter2]['fecha'];
             data[counter2]['address'] = response.rows[counter2]['dirección'];*/
-            orders[0] = response.rows
+            orders = response.rows
 
 /*            for (let i = 0; i<response.rowCount; i++){
                 product['amount'] = response.rows[i]['producto'][0];
