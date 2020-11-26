@@ -4,6 +4,7 @@ import {createProduct, deleteProduct, getProductbyId, getProducts, updateProduct
 import {createOrder, deleteOrder, getOrderbyId, getOrders, updateOrder} from '../controllers/order_controller';
 import {Login, PasswordRecovery, Register, ResetPassword, TOKENGENERATE} from "../controllers/auth_controller";
 import {createToppings, deleteToppings, getToppings, getToppingsbyId, updateToppings } from "../controllers/toppings_controller";
+import {getData} from "../controllers/graph_controller";
 
 const router = Router();
 
@@ -47,6 +48,9 @@ router.get('/toppings/:id', getToppingsbyId);//detalles de la orden con sus prod
 router.post('/toppings', createToppings);
 router.put('/toppings/:id', updateToppings);
 router.delete('/toppings/:id', deleteToppings);
+
+// Graph
+router.post('/graph', getData);
 
 export default router;
 

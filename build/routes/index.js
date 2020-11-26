@@ -6,6 +6,7 @@ const products_controller_1 = require("../controllers/products_controller");
 const order_controller_1 = require("../controllers/order_controller");
 const auth_controller_1 = require("../controllers/auth_controller");
 const toppings_controller_1 = require("../controllers/toppings_controller");
+const graph_controller_1 = require("../controllers/graph_controller");
 const router = express_1.Router();
 router.get('/', (req, res) => {
     res.send('API Running');
@@ -39,4 +40,6 @@ router.get('/toppings/:id', toppings_controller_1.getToppingsbyId); //detalles d
 router.post('/toppings', toppings_controller_1.createToppings);
 router.put('/toppings/:id', toppings_controller_1.updateToppings);
 router.delete('/toppings/:id', toppings_controller_1.deleteToppings);
+// Graph
+router.post('/graph', graph_controller_1.getData);
 exports.default = router;

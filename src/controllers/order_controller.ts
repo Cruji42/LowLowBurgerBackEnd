@@ -2,8 +2,6 @@ import {json, Request, Response} from 'express'
 import {pool} from '../enviroment/database'
 import {QueryResult} from 'pg'
 
-
-
 export const getOrders = async (req: Request, res: Response): Promise<Response> => {
     res.header('Access-Control-Allow-Origin', '*');
     res.header('Access-Control-Allow-Headers', 'Authorization, X-API-KEY, Origin, X-Requested-With, Content-Type, Accept, Access-Control-Allow-Request-Method');
