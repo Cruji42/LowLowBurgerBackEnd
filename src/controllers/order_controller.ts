@@ -3,99 +3,107 @@ import {pool} from '../enviroment/database'
 import {QueryResult} from 'pg'
 
 
-// const Id = req.params.id;
+
 export const getOrders = async (req: Request, res: Response): Promise<Response> => {
     res.header('Access-Control-Allow-Origin', '*');
     res.header('Access-Control-Allow-Headers', 'Authorization, X-API-KEY, Origin, X-Requested-With, Content-Type, Accept, Access-Control-Allow-Request-Method');
     res.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, DELETE');
     res.header('Allow', 'GET, POST, OPTIONS, PUT, DELETE');
     try {
+        //va a traer los json
+        let orders = [];
         let data = {
-            "orders":{
                 "folio":"",
                 "user":"",
                 "delivery":"",
                 "address":"",
                 "products":[]
-            }
         };
         let product = {
             "amount": "",
             "instructions": "",
             "product": "",
             "toppings": []
+        };
+        const getFolios : QueryResult = await pool.query('select distinct folio from public.order');
+        let _folios = getFolios.rows;
+        let folios = [];
+        let counter = 0;
+        let counter2 = 0;
+        for await (let folio of _folios){
+            folios[counter] = folio['folio']
+            counter = counter + 1;
         }
-        let sql='Select distinct t5.folio orden, concat(t6.name ||\' \'|| t6.last_name) cliente, t5.delivery_address dirección, t5.delivery_date as fecha, \n' +
-            '(select array[t2.amount::text, t1.name, t2.instructions, replace(replace(array_agg(t4.name)::text,\'{\',\'\'),\'}\',\'\') ]) as producto\n' +
-            'from products as t1\n' +
-            'join order_item as t2 on t1.id = t2.products_id\n' +
-            'join order_item_has_toppings t3 on t3.order_item_order_id = t2.id\n' +
-            'join toppings as t4 on t4.id = t3.toppings_id\n' +
-            'join public.order as t5 on t5.id = t2.order_id\n' +
-            'join users as t6 on t6.id = t5.user_id\n' +
-            'group by\n' +
-            't1.name,\n' +
-            't2.amount,\n' +
-            't2.instructions,\n' +
-            't2.id,\n' +
-            't5.folio,\n' +
-            't6.name,\n' +
-            't5.delivery_address,\n' +
-            't5.delivery_date,\n' +
-            't6.last_name\n' +
-            'order by t5.folio';
-        const response: QueryResult = await pool.query(sql);
+        // console.log(folios);
+        for await (let i of folios){
+            let sql=`Select distinct t5.folio orden, t6.name cliente, t5.delivery_address dirección, t5.delivery_date fecha,
+(select array[t2.amount::text, t1.name, t2.instructions, replace(replace(array_agg(t4.name)::text,'{',''),'}','') ]) as producto
+from products as t1
+join order_item as t2 on t1.id = t2.products_id
+join order_item_has_toppings t3 on t3.order_item_order_id = t2.id
+join toppings as t4 on t4.id = t3.toppings_id
+join public.order as t5 on t5.id = t2.order_id
+join users as t6 on t6.id = t5.user_id
+where t5.folio = '${i}'
+group by
+t1.name,
+t2.amount,
+t2.instructions,
+t2.id,
+t5.folio,
+t6.name,
+t5.delivery_address,
+t5.delivery_date
+order by t5.folio`;
+            let response: QueryResult = await pool.query(sql);
+            data['folio'] = response.rows[0]['orden'];
+            data['user'] = response.rows[0]['cliente'];
+            data['delivery'] = response.rows[0]['fecha'];
+            data['address'] = response.rows[0]['dirección'];
 
-      /*  data['orders']['folio'] = response.rows[0]['orden'];
-        data['orders']['user'] = response.rows[0]['cliente'];
-        data['orders']['delivery'] = response.rows[0]['fecha'];
-        data['orders']['address'] = response.rows[0]['dirección'];*/
-
-        for (let i = 0; i<response.rowCount-1; i++){
-            let folio = response.rows[i]['orden'];
-            let next_folio = response.rows[i+1]['orden'];
-                if(next_folio = folio){
-                    data['orders']['folio'] = response.rows[i]['orden'];
-                    data['orders']['user'] = response.rows[i]['cliente'];
-                    data['orders']['delivery'] = response.rows[i]['fecha'];
-                    data['orders']['address'] = response.rows[i]['dirección'];
-                }else {
-                    data['orders']['folio'] = response.rows[i+1]['orden'];
-                    data['orders']['user'] = response.rows[i+1]['cliente'];
-                    data['orders']['delivery'] = response.rows[i+1]['fecha'];
-                    data['orders']['address'] = response.rows[i+1]['dirección'];
+            for (let i = 0; i<response.rowCount; i++){
+                product['amount'] = response.rows[i]['producto'][0];
+                product['product'] = response.rows[i]['producto'][1];
+                product['instructions'] = response.rows[i]['producto'][2];
+                product['toppings'] = response.rows[i]['producto'][3];
+                // @ts-ignore
+                data['products'][i] =  product;
+                product = {
+                    "amount": "",
+                    "instructions": "",
+                    "product": "",
+                    "toppings": []
                 }
-
-            /*      data['orders']['folio'] = response.rows[i]['orden'];
-                    data['orders']['user'] = response.rows[i]['cliente'];
-                    data['orders']['delivery'] = response.rows[i]['fecha'];
-                    data['orders']['address'] = response.rows[i]['dirección'];
-                    product['amount'] = response.rows[i]['producto'][0];
-                    product['product'] = response.rows[i]['producto'][1];
-                    product['instructions'] = response.rows[i]['producto'][2];
-                    product['toppings'] = response.rows[i]['producto'][3];
-                    // @ts-ignore
-                    data[`orders`]['products'][i] =  product;
-                    product = {
-                        "amount": "",
-                        "instructions": "",
-                        "product": "",
-                        "toppings": []
-                    }*/
+            }
+            // console.log(data);
+            orders.push(data);
+        }
+        /*for(let i= 0; i>getFolios.rowCount; i++){
+            let folio = folios[i];
+            const response: QueryResult = await pool.query(sql);
+            data['orders']['folio'] = response.rows[0]['orden'];
+            data['orders']['user'] = response.rows[0]['cliente'];
+            data['orders']['delivery'] = response.rows[0]['fecha'];
+            data['orders']['address'] = response.rows[0]['dirección'];
+            for (let i = 0; i<response.rowCount; i++){
+                product['amount'] = response.rows[i]['producto'][0];
+                product['product'] = response.rows[i]['producto'][1];
+                product['instructions'] = response.rows[i]['producto'][2];
+                product['toppings'] = response.rows[i]['producto'][3];
+                // @ts-ignore
+                data[`orders`]['products'][i] =  product;
+                product = {
+                    "amount": "",
+                    "instructions": "",
+                    "product": "",
+                    "toppings": []
                 }
+            }
+            orders[i] = data;
+        }*/
+        console.log(orders);
+        return res.status(200).json({orders});
 
-
-
-/*
-        product['amount'] = response.rows[1]['producto'][0];
-        product['product'] = response.rows[1]['producto'][1];
-        product['instructions'] = response.rows[1]['producto'][2];
-        product['toppings'] = response.rows[1]['producto'][3];
-
-        data['orders']['products'][1]=  product;*/
-        //console.log(product);
-
-        return res.status(200).json(data);
     } catch (error) {
         console.log(error);
         return res.status(500).json('internal server error');
@@ -111,13 +119,13 @@ export const getOrderbyId = async (req: Request, res: Response): Promise<Respons
         const Id = req.params.id;
 
         let data = {
-            "orders":{
+
                 "folio":"",
                 "user":"",
                 "delivery":"",
                 "address":"",
                 "products":[]
-            }
+
         };
 
         let product = {
@@ -149,10 +157,10 @@ order by t5.folio`;
 
         const response: QueryResult = await pool.query(sql);
 
-        data['orders']['folio'] = response.rows[0]['orden'];
-        data['orders']['user'] = response.rows[0]['cliente'];
-        data['orders']['delivery'] = response.rows[0]['fecha'];
-        data['orders']['address'] = response.rows[0]['dirección'];
+        data['folio'] = response.rows[0]['orden'];
+        data['user'] = response.rows[0]['cliente'];
+        data['delivery'] = response.rows[0]['fecha'];
+        data['address'] = response.rows[0]['dirección'];
 
         for (let i = 0; i<response.rowCount; i++){
                     product['amount'] = response.rows[i]['producto'][0];
@@ -160,7 +168,7 @@ order by t5.folio`;
                     product['instructions'] = response.rows[i]['producto'][2];
                     product['toppings'] = response.rows[i]['producto'][3];
                     // @ts-ignore
-                    data[`orders`]['products'][i] =  product;
+                    data['products'][i] =  product;
                     product = {
                         "amount": "",
                         "instructions": "",
@@ -172,7 +180,7 @@ order by t5.folio`;
 
         console.log(response.rows);
 
-        return res.status(200).json(data);
+        return res.status(200).json({"order":[data]});
     } catch (error) {
         console.log(error);
         return res.status(500).json('internal server error');
