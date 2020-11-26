@@ -26,7 +26,6 @@ exports.getOrders = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
     res.header('Allow', 'GET, POST, OPTIONS, PUT, DELETE');
     try {
         //va a traer los json
-        let orders = [];
         let data = {
             "folio": "",
             "user": "",
@@ -59,8 +58,9 @@ exports.getOrders = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
             }
             finally { if (e_1) throw e_1.error; }
         }
+        // console.log(folios);
+        let orders = [];
         try {
-            // console.log(folios);
             for (var folios_1 = __asyncValues(folios), folios_1_1; folios_1_1 = yield folios_1.next(), !folios_1_1.done;) {
                 let i = folios_1_1.value;
                 let sql = `Select distinct t5.folio orden, t6.name cliente, t5.delivery_address dirección, t5.delivery_date fecha,
@@ -103,6 +103,7 @@ order by t5.folio`;
                 }
                 // console.log(data);
                 orders.push(data);
+                console.log(orders);
             }
         }
         catch (e_2_1) { e_2 = { error: e_2_1 }; }
@@ -135,7 +136,6 @@ order by t5.folio`;
             }
             orders[i] = data;
         }*/
-        console.log(orders);
         return res.status(200).json({ orders });
     }
     catch (error) {
@@ -201,7 +201,6 @@ order by t5.folio`;
                 "toppings": []
             };
         }
-        console.log(response.rows);
         return res.status(200).json({ "order": [data] });
     }
     catch (error) {
@@ -211,9 +210,11 @@ order by t5.folio`;
 });
 exports.createOrder = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     res.header('Access-Control-Allow-Origin', '*');
-    res.header('Access-Control-Allow-Headers', 'Authorization, X-API-KEY, Origin, X-Requested-With, Content-Type, Accept, Access-Control-Allow-Request-Method');
-    res.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, DELETE');
-    res.header('Allow', 'GET, POST, OPTIONS, PUT, DELETE');
+    res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
+    res.header('Access-Control-Allow-Methods', '*');
+    res.header('Access-Control-Allow-Origin', '*');
+    res.header('Content-Type', 'application/json; charset=utf-8');
+    res.header('Allow', '*');
     try {
         const { user, delivery, address, products } = req.body;
         /*this is how the function call looks like

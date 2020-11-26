@@ -11,7 +11,6 @@ export const getOrders = async (req: Request, res: Response): Promise<Response> 
     res.header('Allow', 'GET, POST, OPTIONS, PUT, DELETE');
     try {
         //va a traer los json
-        let orders = [];
         let data = {
                 "folio":"",
                 "user":"",
@@ -35,6 +34,7 @@ export const getOrders = async (req: Request, res: Response): Promise<Response> 
             counter = counter + 1;
         }
         // console.log(folios);
+        let orders = [];
         for await (let i of folios){
             let sql=`Select distinct t5.folio orden, t6.name cliente, t5.delivery_address dirección, t5.delivery_date fecha,
 (select array[t2.amount::text, t1.name, t2.instructions, replace(replace(array_agg(t4.name)::text,'{',''),'}','') ]) as producto
@@ -77,6 +77,7 @@ order by t5.folio`;
             }
             // console.log(data);
             orders.push(data);
+            console.log(orders);
         }
         /*for(let i= 0; i>getFolios.rowCount; i++){
             let folio = folios[i];
@@ -101,7 +102,6 @@ order by t5.folio`;
             }
             orders[i] = data;
         }*/
-        console.log(orders);
         return res.status(200).json({orders});
 
     } catch (error) {
@@ -177,9 +177,6 @@ order by t5.folio`;
                     }
         }
 
-
-        console.log(response.rows);
-
         return res.status(200).json({"order":[data]});
     } catch (error) {
         console.log(error);
@@ -188,9 +185,11 @@ order by t5.folio`;
 }
 export const createOrder = async (req: Request, res: Response): Promise<Response> => {
     res.header('Access-Control-Allow-Origin', '*');
-    res.header('Access-Control-Allow-Headers', 'Authorization, X-API-KEY, Origin, X-Requested-With, Content-Type, Accept, Access-Control-Allow-Request-Method');
-    res.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, DELETE');
-    res.header('Allow', 'GET, POST, OPTIONS, PUT, DELETE');
+    res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
+    res.header('Access-Control-Allow-Methods', '*');
+    res.header('Access-Control-Allow-Origin', '*');
+    res.header('Content-Type', 'application/json; charset=utf-8');
+    res.header('Allow', '*');
     try{
         const {user, delivery, address, products} = req.body;
         /*this is how the function call looks like
