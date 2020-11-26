@@ -9,13 +9,11 @@ export const pool = new Pool({
     port: 5432
 });
 
-/*
-export const pool = new Pool({
+/*export const pool = new Pool({
     user:'postgres',
     host:'localhost',
     password:' ',
     database:'LLB_Local',
     port: 5432
-});
-*/
+});*/
 

@@ -1,7 +1,7 @@
 import {Router} from 'express';
 import {deleteUser, getUserbyEmail, getUsers, updateUser} from '../controllers/users_controller';
 import {createProduct, deleteProduct, getProductbyId, getProducts, updateProduct} from '../controllers/products_controller';
-import {createOrder, deleteOrder, getOrderbyId, getOrders, updateOrder} from '../controllers/order_controller';
+import {createOrder, deleteOrder, getOrderbyId, getOrders, updateOrder, getUserOrders} from '../controllers/order_controller';
 import {Login, PasswordRecovery, Register, ResetPassword, TOKENGENERATE} from "../controllers/auth_controller";
 import {createToppings, deleteToppings, getToppings, getToppingsbyId, updateToppings } from "../controllers/toppings_controller";
 import {getData} from "../controllers/graph_controller";
@@ -39,8 +39,9 @@ router.delete('/products/:id', deleteProduct);
 router.get('/orders', getOrders);
 router.get('/orders/:id', getOrderbyId);//detalles de la orden con sus productos
 router.post('/orders', createOrder);
-router.put('/orders/:id', updateOrder);
+router.put('/orders', updateOrder);
 router.delete('/orders/:id', deleteOrder);
+router.get('/userOrders/:id',getUserOrders)
 
 // Toppings Routes
 router.get('/toppings', getToppings);

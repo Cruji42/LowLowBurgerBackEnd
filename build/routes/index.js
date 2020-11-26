@@ -32,8 +32,9 @@ router.delete('/products/:id', products_controller_1.deleteProduct);
 router.get('/orders', order_controller_1.getOrders);
 router.get('/orders/:id', order_controller_1.getOrderbyId); //detalles de la orden con sus productos
 router.post('/orders', order_controller_1.createOrder);
-router.put('/orders/:id', order_controller_1.updateOrder);
+router.put('/orders', order_controller_1.updateOrder);
 router.delete('/orders/:id', order_controller_1.deleteOrder);
+router.get('/userOrders/:id', order_controller_1.getUserOrders);
 // Toppings Routes
 router.get('/toppings', toppings_controller_1.getToppings);
 router.get('/toppings/:id', toppings_controller_1.getToppingsbyId); //detalles de la orden con sus productos
