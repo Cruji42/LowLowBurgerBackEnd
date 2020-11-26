@@ -2,7 +2,7 @@ import {json, Request, Response} from 'express'
 import {pool} from '../enviroment/database'
 import {QueryResult} from 'pg'
 
-/*export const getOrders = async (req: Request, res: Response): Promise<Response> => {
+export const getOrders = async (req: Request, res: Response): Promise<Response> => {
     res.header('Access-Control-Allow-Origin', '*');
     res.header('Access-Control-Allow-Headers', 'Authorization, X-API-KEY, Origin, X-Requested-With, Content-Type, Accept, Access-Control-Allow-Request-Method');
     res.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, DELETE');
@@ -83,7 +83,7 @@ order by t5.folio`;
             console.log(data + counter2.toString());
             orders.push(data);
         }
-        /!*for(let i= 0; i>getFolios.rowCount; i++){
+        /*for(let i= 0; i>getFolios.rowCount; i++){
             let folio = folios[i];
             const response: QueryResult = await pool.query(sql);
             data['orders']['folio'] = response.rows[0]['orden'];
@@ -105,14 +105,14 @@ order by t5.folio`;
                 }
             }
             orders[i] = data;
-        }*!/
+        }*/
         return res.status(200).json({orders});
 
     } catch (error) {
         console.log(error);
         return res.status(500).json('internal server error');
     }
-}*/
+}
 export const getOrderbyId = async (req: Request, res: Response): Promise<Response> => {
     res.header('Access-Control-Allow-Origin', '*');
     res.header('Access-Control-Allow-Headers', 'Authorization, X-API-KEY, Origin, X-Requested-With, Content-Type, Accept, Access-Control-Allow-Request-Method');
