@@ -28,7 +28,7 @@ export const Login = async (req: Request, res: Response): Promise<Response> => {
         if(response.rowCount == 1){
             bcrypt.compare(password, passwordencrypted).then((result: boolean) => {
                 if(result){
-                    return res.status(200).json(response.rows);
+                    return res.status(200).json({"user":response.rows});
                 }else {
                     return res.status(401).json('Password Incorrect');
                 }
