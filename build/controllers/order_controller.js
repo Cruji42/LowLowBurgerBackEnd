@@ -610,8 +610,9 @@ exports.updateOrder = (req, res) => __awaiter(void 0, void 0, void 0, function* 
     res.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, DELETE');
     res.header('Allow', 'GET, POST, OPTIONS, PUT, DELETE');
     try {
-        const { id, status } = req.body;
-        const response = yield database_1.pool.query('UPDATE public."order" SET state= $1 WHERE id = $2', [status, id]);
+        const { folio } = req.body;
+        const status = 'Lista';
+        const response = yield database_1.pool.query(`UPDATE public."order" SET state= '${status}' WHERE folio = '${folio}' `);
         return res.json({
             message: 'Order updated'
         });
