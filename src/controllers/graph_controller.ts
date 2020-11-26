@@ -12,10 +12,11 @@ export const getData = async (req: Request, res: Response): Promise<Response> =>
     try {
         const {day_min, day_max} = req.body;
         let result = {"pie-chart": {}, "orders":{}};
-        const response: QueryResult = await pool.query('select count(products_id)*100/(select count(id) from order_item) porcentaje, t2.name from order_item t1\n' +
-            'join products t2 on \n' +
-            't1.products_id = t2.id\n' +
-            'group by t1.products_id, t2.name');
+        const response: QueryResult = await pool.query('select ROUND( (count(products_id)::float*100/(select count(id)::float from order_item))::numeric, 2 ) porcentaje, t2.name from order_item t1\n' +
+            '            join products t2 on  \n' +
+            '            t1.products_id = t2.id\n' +
+            '            group by t1.products_id, t2.name\n' +
+            '\t\t\t');
         result["pie-chart"] = response.rows;
         const response2: QueryResult = await pool.query(`select * from public.order t1 where delivery_date between '${day_min}' and '${day_max}'`);
         result["orders"] = response2.rows;

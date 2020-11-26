@@ -12,6 +12,8 @@ export const getOrders = async (req: Request, res: Response): Promise<Response> 
         let data = {
                 "folio":"",
                 "user":"",
+                "state":"",
+                "total":"",
                 "delivery":"",
                 "address":"",
                 "products":[]
@@ -19,6 +21,7 @@ export const getOrders = async (req: Request, res: Response): Promise<Response> 
         let product = {
             "amount": "",
             "instructions": "",
+            "image": "",
             "product": "",
             "toppings": []
         };
@@ -34,15 +37,14 @@ export const getOrders = async (req: Request, res: Response): Promise<Response> 
         }
         // console.log(folios);
         for await (let i of folios){
-            let sql=`Select distinct t5.folio orden, t6.name cliente, t5.delivery_address direccion, t5.delivery_date fecha,
-(select array[t2.amount::text, t1.name, t2.instructions, replace(replace(array_agg(t4.name)::text,'{',''),'}','') ]) as producto
+            let sql=`Select distinct t5.folio orden, t5.state, t5.total, t6.name cliente, t5.delivery_address direccion, t5.delivery_date fecha,
+(select array[t2.amount::text, t1.name, t2.instructions, t1.image, replace(replace(array_agg(t4.name)::text,'{',''),'}','') ]) as producto
 from products as t1
 join order_item as t2 on t1.id = t2.products_id
 join order_item_has_toppings t3 on t3.order_item_order_id = t2.id
 join toppings as t4 on t4.id = t3.toppings_id
 join public.order as t5 on t5.id = t2.order_id
 join users as t6 on t6.id = t5.user_id
-where t5.folio = '${i}'
 group by
 t1.name,
 t2.amount,
@@ -51,7 +53,10 @@ t2.id,
 t5.folio,
 t6.name,
 t5.delivery_address,
-t5.delivery_date
+t5.delivery_date,
+t5.state,
+t5.total,
+t1.image
 order by t5.folio`;
             let resp: QueryResult = await pool.query(sql);
             data['folio'] = resp.rows[counter2]['orden'];
