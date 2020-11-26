@@ -112,8 +112,6 @@ export const TOKENGENERATE = async (req: Request, res: Response): Promise<Respon
     }
 }
 
-
-
 export const PasswordRecovery = async (req: Request, res: Response): Promise<Response> => {
     res.header('Access-Control-Allow-Origin', '*');
     res.header('Access-Control-Allow-Headers', 'Authorization, X-API-KEY, Origin, X-Requested-With, Content-Type, Accept, Access-Control-Allow-Request-Method');

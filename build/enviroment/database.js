@@ -18,5 +18,4 @@ export const pool = new Pool({
     database:'LLB_Local',
     port: 5432
 });
-
 */
