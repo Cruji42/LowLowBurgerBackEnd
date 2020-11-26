@@ -39,7 +39,7 @@ router.delete('/products/:id', deleteProduct);
 router.get('/orders', getOrders);
 router.get('/orders/:id', getOrderbyId);//detalles de la orden con sus productos
 router.post('/orders', createOrder);
-router.put('/orders', updateOrder);
+router.post('/ordersUpdate', updateOrder);
 router.delete('/orders/:id', deleteOrder);
 router.get('/userOrders/:id',getUserOrders)
 
