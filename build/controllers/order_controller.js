@@ -18,6 +18,223 @@ var __asyncValues = (this && this.__asyncValues) || function (o) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.deleteOrder = exports.updateOrder = exports.createOrder = exports.getOrderbyId = exports.getOrders = void 0;
 const database_1 = require("../enviroment/database");
+// export const getOrders = async (req: Request, res: Response): Promise<Response> => {
+//     res.header('Access-Control-Allow-Origin', '*');
+//     res.header('Access-Control-Allow-Headers', 'Authorization, X-API-KEY, Origin, X-Requested-With, Content-Type, Accept, Access-Control-Allow-Request-Method');
+//     res.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, DELETE');
+//     res.header('Allow', 'GET, POST, OPTIONS, PUT, DELETE');
+//     try {
+//         //va a traer los json
+//         let data = {
+//                 "folio":"",
+//                 "user":"",
+//                 "state":"",
+//                 "total":"",
+//                 "delivery":"",
+//                 "address":"",
+//                 "products":[]
+//         };
+//         let product = {
+//             "amount": "",
+//             "instructions": "",
+//             "image": "",
+//             "product": "",
+//             "toppings": []
+//         };
+//         const getFolios : QueryResult = await pool.query('select distinct folio from public.order');
+//         let _folios = getFolios.rows;
+//         let folios = [];
+//         let counter = 0;
+//         let counter2 = -1;
+//         let orders = [];
+//         for await (let folio of _folios){
+//             folios[counter] = folio['folio']
+//             counter = counter + 1;
+//         }
+//         // console.log(folios);
+//         for await (let i of folios){
+//             let sql=`Select distinct t5.folio orden, t5.state, t5.total, t6.name cliente, t5.delivery_address direccion, t5.delivery_date fecha,
+// (select array[t2.amount::text, t1.name, t2.instructions, t1.image, replace(replace(array_agg(t4.name)::text,'{',''),'}','') ]) as producto
+// from products as t1
+// join order_item as t2 on t1.id = t2.products_id
+// join order_item_has_toppings t3 on t3.order_item_order_id = t2.id
+// join toppings as t4 on t4.id = t3.toppings_id
+// join public.order as t5 on t5.id = t2.order_id
+// join users as t6 on t6.id = t5.user_id
+// group by
+// t1.name,
+// t2.amount,
+// t2.instructions,
+// t2.id,
+// t5.folio,
+// t6.name,
+// t5.delivery_address,
+// t5.delivery_date,
+// t5.state,
+// t5.total,
+// t1.image
+// order by t5.folio`;
+//             let resp: QueryResult = await pool.query(sql);
+//             data['folio'] = resp.rows[counter2]['orden'];
+//             console.log(resp.rows[0]);
+//
+//             data['user'] = resp.rows[counter2]['cliente'];
+//             data['state'] = resp.rows[counter]['state'];
+//             data['total'] = resp.rows[counter]['total'];
+//             data['delivery'] = resp.rows[counter2]['fecha'];
+//             data['address'] = resp.rows[counter2]['direccion'];
+//             for (let i = 0; i<resp.rowCount; i++){
+//                 product['amount'] = resp.rows[i]['producto'][0];
+//                 product['instructions'] = resp.rows[i]['producto'][1];
+//                 product['image'] = resp.rows[i]['producto'][2];
+//                 product['product'] = resp.rows[i]['producto'][3];
+//                 product['toppings'] = resp.rows[i]['producto'][4];
+//                 // @ts-ignore
+//                 data['products'][i] =  product;
+//                 product = {
+//                     "amount": "",
+//                     "instructions": "",
+//                     "image": "",
+//                     "product": "",
+//                     "toppings": []
+//                 };
+//             }
+//             orders[counter2] = data;
+//             counter2 = counter2++;
+//             console.log(data + counter2.toString());
+//             orders.push(data);
+//         }
+//         for(let i= 0; i>getFolios.rowCount; i++){
+//             let folio = folios[i];
+//             const response: QueryResult = await pool.query(sql);
+//             data['orders']['folio'] = response.rows[0]['orden'];
+//             data['orders']['user'] = response.rows[0]['cliente'];
+//             data['orders']['delivery'] = response.rows[0]['fecha'];
+//             data['orders']['address'] = response.rows[0]['dirección'];
+//             for (let i = 0; i<response.rowCount; i++){
+//                 product['amount'] = response.rows[i]['producto'][0];
+//                 product['product'] = response.rows[i]['producto'][1];
+//                 product['instructions'] = response.rows[i]['producto'][2];
+//                 product['toppings'] = response.rows[i]['producto'][3];
+//                 // @ts-ignore
+//                 data[`orders`]['products'][i] =  product;
+//                 product = {
+//                     "amount": "",
+//                     "instructions": "",
+//                     "product": "",
+//                     "toppings": []
+//                 }
+//             }
+//             orders[i] = data;
+//         }
+//         return res.status(200).json({orders});
+//
+//     } catch (error) {
+//         console.log(error);
+//         return res.status(500).json('internal server error');
+//     }
+//
+// //     try {
+// //         //va a traer los json
+// //         let data = {
+// //             "folio":"",
+// //             "user":"",
+// //             "state":"",
+// //             "total":"",
+// //             "delivery":"",
+// //             "address":"",
+// //             "products":[]
+// //         };
+// //         let product = {
+// //             "amount": "",
+// //             "instructions": "",
+// //             "image": "",
+// //             "product": "",
+// //             "toppings": []
+// //         };
+// //         const getFolios : QueryResult = await pool.query('select distinct folio from public.order');
+// //         let _folios = getFolios.rows;
+// //         let folios = [];
+// //         let counter = 0;
+// //         let counter2 = -1;
+// //         let orders = [];
+// //         for await (let folio of _folios){
+// //             folios[counter] = folio['folio']
+// //             counter = counter + 1;
+// //         }
+// //
+// //         for await (let i of folios) {
+// //             const sql = `Select distinct t5.folio orden, t5.state, t5.total, t6.name cliente, t5.delivery_address direccion, t5.delivery_date fecha,
+// // (select array[t2.amount::text, t1.name, t2.instructions, t1.image, replace(replace(array_agg(t4.name)::text,'{',''),'}','') ]) as producto
+// // from products as t1
+// // join order_item as t2 on t1.id = t2.products_id
+// // join order_item_has_toppings t3 on t3.order_item_order_id = t2.id
+// // join toppings as t4 on t4.id = t3.toppings_id
+// // join public.order as t5 on t5.id = t2.order_id
+// // join users as t6 on t6.id = t5.user_id
+// // where t5.folio = '${i}'
+// // group by
+// // t1.name,
+// // t2.amount,
+// // t2.instructions,
+// // t2.id,
+// // t5.folio,
+// // t6.name,
+// // t5.delivery_address,
+// // t5.delivery_date,
+// // t5.state,
+// // t5.total,
+// // t1.image
+// // order by t5.folio`;
+// //             const response: QueryResult = await pool.query(sql);
+// //             data['folio'] = response.rows[0]['orden'];
+// //             data['user'] = response.rows[0]['cliente'];
+// //             data['state'] = response.rows[0]['state'];
+// //             data['total'] = response.rows[0]['total'];
+// //             data['delivery'] = response.rows[0]['fecha'];
+// //             data['address'] = response.rows[0]['dirección'];
+// //             console.log(data);
+// //         }
+// //         for (let i = 0; i< getFolios.rowCount; i++){
+// //             product['amount'] = getFolios.rows[i]['producto'][0];
+// //             product['product'] = getFolios.rows[i]['producto'][1];
+// //             product['instructions'] = getFolios.rows[i]['producto'][2];
+// //             product['toppings'] = getFolios.rows[i]['producto'][3];
+// //             // @ts-ignore
+// //             data['products'][i] =  product;
+// //             product = {
+// //                 "amount": "",
+// //                 "instructions": "",
+// //                 "image": "",
+// //                 "product": "",
+// //                 "toppings": []
+// //             }
+// //         }
+// //
+// //        /* for (let i = 0; i<response.rowCount; i++){
+// //             product['amount'] = response.rows[i]['producto'][0];
+// //             product['product'] = response.rows[i]['producto'][1];
+// //             product['image'] = response.rows[i]['producto'][2];
+// //             product['instructions'] = response.rows[i]['producto'][3];
+// //             product['toppings'] = response.rows[i]['producto'][4];
+// //             // @ts-ignore
+// //             data['products'][i] =  product;
+// //             product = {
+// //                 "amount": "",
+// //                 "instructions": "",
+// //                 "image":"",
+// //                 "product": "",
+// //                 "toppings": []
+// //             }
+// //         }
+// // */
+// //         return res.status(200).json({"order":[data]});
+// //     }
+// //     catch (error) {
+// //         console.log(error);
+// //         return res.status(500).json('internal server error');
+// //     }
+// }
 exports.getOrders = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     var e_1, _a, e_2, _b;
     res.header('Access-Control-Allow-Origin', '*');
@@ -26,11 +243,10 @@ exports.getOrders = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
     res.header('Allow', 'GET, POST, OPTIONS, PUT, DELETE');
     try {
         //va a traer los json
+        let orders = [];
         let data = {
             "folio": "",
             "user": "",
-            "state": "",
-            "total": "",
             "delivery": "",
             "address": "",
             "products": []
@@ -38,7 +254,6 @@ exports.getOrders = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
         let product = {
             "amount": "",
             "instructions": "",
-            "image": "",
             "product": "",
             "toppings": []
         };
@@ -46,8 +261,7 @@ exports.getOrders = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
         let _folios = getFolios.rows;
         let folios = [];
         let counter = 0;
-        let counter2 = -1;
-        let orders = [];
+        let counter2 = 0;
         try {
             for (var _folios_1 = __asyncValues(_folios), _folios_1_1; _folios_1_1 = yield _folios_1.next(), !_folios_1_1.done;) {
                 let folio = _folios_1_1.value;
@@ -66,14 +280,15 @@ exports.getOrders = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
             // console.log(folios);
             for (var folios_1 = __asyncValues(folios), folios_1_1; folios_1_1 = yield folios_1.next(), !folios_1_1.done;) {
                 let i = folios_1_1.value;
-                let sql = `Select distinct t5.folio orden, t5.state, t5.total, t6.name cliente, t5.delivery_address direccion, t5.delivery_date fecha,
-(select array[t2.amount::text, t1.name, t2.instructions, t1.image, replace(replace(array_agg(t4.name)::text,'{',''),'}','') ]) as producto
+                let sql = `Select distinct t5.folio orden, t6.name cliente, t5.delivery_address dirección, t5.delivery_date fecha,
+(select array[t2.amount::text, t1.name, t2.instructions, replace(replace(array_agg(t4.name)::text,'{',''),'}','') ]) as producto
 from products as t1
 join order_item as t2 on t1.id = t2.products_id
 join order_item_has_toppings t3 on t3.order_item_order_id = t2.id
 join toppings as t4 on t4.id = t3.toppings_id
 join public.order as t5 on t5.id = t2.order_id
 join users as t6 on t6.id = t5.user_id
+where t5.folio = '${i}'
 group by
 t1.name,
 t2.amount,
@@ -82,34 +297,28 @@ t2.id,
 t5.folio,
 t6.name,
 t5.delivery_address,
-t5.delivery_date,
-t5.state,
-t5.total,
-t1.image
+t5.delivery_date
 order by t5.folio`;
-                let resp = yield database_1.pool.query(sql);
-                data['folio'] = resp.rows[counter2]['orden'];
-                data['user'] = resp.rows[counter2]['cliente'];
-                data['delivery'] = resp.rows[counter2]['fecha'];
-                data['address'] = resp.rows[counter2]['direccion'];
-                for (let i = 0; i < resp.rowCount; i++) {
-                    product['amount'] = resp.rows[i]['producto'][0];
-                    product['product'] = resp.rows[i]['producto'][1];
-                    product['instructions'] = resp.rows[i]['producto'][2];
-                    product['toppings'] = resp.rows[i]['producto'][3];
+                let response = yield database_1.pool.query(sql);
+                data['folio'] = response.rows[0]['orden'];
+                data['user'] = response.rows[0]['cliente'];
+                data['delivery'] = response.rows[0]['fecha'];
+                data['address'] = response.rows[0]['dirección'];
+                for (let i = 0; i < response.rowCount; i++) {
+                    product['amount'] = response.rows[i]['producto'][0];
+                    product['product'] = response.rows[i]['producto'][1];
+                    product['instructions'] = response.rows[i]['producto'][2];
+                    product['toppings'] = response.rows[i]['producto'][3];
                     // @ts-ignore
                     data['products'][i] = product;
                     product = {
                         "amount": "",
                         "instructions": "",
-                        "image": "",
                         "product": "",
                         "toppings": []
                     };
                 }
-                orders[counter2] = data;
-                counter2 = counter2++;
-                console.log(data + counter2.toString());
+                // console.log(data);
                 orders.push(data);
             }
         }
@@ -143,6 +352,7 @@ order by t5.folio`;
             }
             orders[i] = data;
         }*/
+        console.log(orders);
         return res.status(200).json({ orders });
     }
     catch (error) {
